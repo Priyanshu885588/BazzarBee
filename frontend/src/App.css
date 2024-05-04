@@ -1,0 +1,9 @@
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: black;
+  background-image: url(assets/logo.png);
+  background-position: center;
+  background-size: 230px;
+  background-repeat: no-repeat;
+}
