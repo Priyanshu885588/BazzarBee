@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar } from "./Navbar";
+import { Navbar } from "../elements/Navbar";
 import ElectronicsImage from "../assets/electronics.png";
 import FashionImage from "../assets/fashion.png";
 import BeautyImage from "../assets/beauty.png";
@@ -56,7 +56,7 @@ export const Header = () => {
         <div className="w-2/5 h-full flex flex-col gap-4 rounded-3xl">
           <div className="row-span-2 text-white p-4 h-2/3 rounded-3xl shadow-2xl homeSlideshow flex flex-col justify-end">
             <div className="h-1/4 w-full text-white quicksand text-sm flex justify-end">
-              <p className="w-2/3 text-center border-r p-2 backdrop-blur-3xl rounded-2xl font-bold opacity-85">
+              <p className="w-2/3 xl:text-sm 2xl:text-lg text-center border-r p-2 backdrop-blur-3xl rounded-2xl font-bold opacity-85">
                 Show your BazzarBee pride. Get high-quality swag directly from
                 the brands.
               </p>
@@ -71,7 +71,7 @@ export const Header = () => {
             </div>
           </div>
           <div className="text-white p-2 h-1/3 rounded-3xl shadow-2xl flex justify-start homebeauty items-center">
-            <p className="text-black font-bold w-1/3 text-2xl h-full p-2 playfair opacity-65">
+            <p className="text-black font-bold w-1/3 2xl:text-4xl xl:text-2xl h-full p-2 playfair opacity-65">
               Kiss dull skin goodbye
             </p>
           </div>
