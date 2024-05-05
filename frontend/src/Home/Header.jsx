@@ -4,14 +4,15 @@ import ElectronicsImage from "../assets/electronics.png";
 import FashionImage from "../assets/fashion.png";
 import BeautyImage from "../assets/beauty.png";
 import HomeImage from "../assets/home.png";
+import { MdArrowOutward } from "react-icons/md";
 export const Header = () => {
   return (
     <>
       <Navbar />
-      <div class="w-full h-[72vh] flex gap-4">
-        <div class="row-span-1 bg-amber-700 px-4 py-7 pl-10 h-full w-3/5 rounded-3xl shadow-2xl flex flex-col items-start gap-4">
+      <div className="w-full h-[72vh] flex gap-4">
+        <div className="row-span-1 bg-amber-700 px-4 py-7 pl-10 h-full w-3/5 rounded-3xl shadow-2xl flex flex-col items-start justify-between gap-4">
           <div className="flex">
-            <h1 className=" text-7xl text-white quicksand">
+            <h1 className="2xl:text-8xl xl:text-7xl text-white quicksand">
               Limited-Time Deals! Up to 70% Off!
             </h1>
           </div>
@@ -53,17 +54,26 @@ export const Header = () => {
           </div>
         </div>
         <div className="w-2/5 h-full flex flex-col gap-4 rounded-3xl">
-          <div class="row-span-2 bg-black text-white p-4 h-2/3 rounded-3xl shadow-2xl">
-            <iframe
-              src="https://giphy.com/embed/qRaLFMJ73C2KGJW6Uj"
-              className="h-full w-full rounded-xl"
-            ></iframe>
+          <div className="row-span-2 text-white p-4 h-2/3 rounded-3xl shadow-2xl homeSlideshow flex flex-col justify-end">
+            <div className="h-1/4 w-full text-white quicksand text-sm flex justify-end">
+              <p className="w-2/3 text-center border-r p-2 backdrop-blur-3xl rounded-2xl font-bold opacity-85">
+                Show your BazzarBee pride. Get high-quality swag directly from
+                the brands.
+              </p>
+            </div>
+            <div className="h-1/4 w-full flex justify-end items-end">
+              <button className="bg-white roboto text-black py-3 px-4 rounded-full text-xs font-semibold hover:bg-amber-400 transition-all duration-300">
+                Start Shopping
+              </button>
+              <button className="bg-white roboto text-black p-2 rounded-full hover:bg-amber-400 transition-all duration-300">
+                <MdArrowOutward color="black" size="20px" />
+              </button>
+            </div>
           </div>
-          <div class="bg-black text-white p-2 h-1/3 rounded-3xl shadow-2xl flex justify-end">
-            <iframe
-              src="https://giphy.com/embed/jT3y0MQrEHfWDnjgDN"
-              className="h-full w-full"
-            ></iframe>
+          <div className="text-white p-2 h-1/3 rounded-3xl shadow-2xl flex justify-start homebeauty items-center">
+            <p className="text-black font-bold w-1/3 text-2xl h-full p-2 playfair opacity-65">
+              Kiss dull skin goodbye
+            </p>
           </div>
         </div>
       </div>
