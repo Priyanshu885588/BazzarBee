@@ -22,16 +22,24 @@ const ProductSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  category: {
+  categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: true,
   },
-  seller: {
+  sellerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Seller",
     required: true,
   },
+  subCategory:{
+    type: String,
+    required: true,
+  },
+  imageUrl:{
+    type: String,
+    required: true,
+  }
 });
 
 module.exports = mongoose.model("Product", ProductSchema);
