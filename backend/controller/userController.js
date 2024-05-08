@@ -200,14 +200,52 @@ const sendVerificationCodeEmail = async (email, verificationCode) => {
   }
 };
 
+const login = async (req, res) => {
+  const { username, email, password } = req.body;
+  try {
+    if (!username && !email) {
+      return res.status(400).json({ message: "Missing username or email" });
+    }
+
+    let user;
+    user = await User.findOne({ username, email });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid username or email" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    res
+      .status(200)
+      .json({ message: "Login successful!", token, userId: user._id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const signup = async (req, res) => {
   const { username, email, password, verificationCode, phoneNumber } = req.body;
   try {
     if (!username || !email || !password || !verificationCode || !phoneNumber) {
       return res.status(400).json({ message: "Missing required fields" });
     }
-    const existingUser = await User.findOne({ email });
+
+    const existingUser = await User.findOne({ username });
     if (existingUser) {
+      return res.status(409).json({ message: "username already in use" });
+    }
+
+    const existingUser1 = await User.findOne({ email });
+    if (existingUser1) {
       return res.status(409).json({ message: "Email already in use" });
     }
     const verification = await Verification.findOne({
@@ -225,11 +263,16 @@ const signup = async (req, res) => {
       phoneNumber,
     });
     await user.save();
-    res.status(201).json({ message: "Signup successful!" });
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(201).json({ message: "Signup successful!", token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-module.exports = { insert, emailVerification, signup };
+module.exports = { insert, emailVerification, signup, login };
