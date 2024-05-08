@@ -2,6 +2,8 @@ const User = require("../modals/user");
 const Category = require("../modals/category");
 const Product = require("../modals/product");
 const Verification = require("../modals/verification");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
@@ -198,4 +200,36 @@ const sendVerificationCodeEmail = async (email, verificationCode) => {
   }
 };
 
-module.exports = { insert, emailVerification };
+const signup = async (req, res) => {
+  const { username, email, password, verificationCode, phoneNumber } = req.body;
+  try {
+    if (!username || !email || !password || !verificationCode || !phoneNumber) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "Email already in use" });
+    }
+    const verification = await Verification.findOne({
+      verificationCode,
+      email,
+    });
+    if (!verification) {
+      return res.status(400).json({ message: "Invalid verification code" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+      phoneNumber,
+    });
+    await user.save();
+    res.status(201).json({ message: "Signup successful!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { insert, emailVerification, signup };
