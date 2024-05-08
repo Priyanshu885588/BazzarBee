@@ -4,11 +4,14 @@ const app = express();
 
 const connectDB = require("./db/db");
 const userRoute = require("./routes/userRoutes")
+const productRoute = require("./routes/productRoutes")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/user",userRoute)
+
+app.use("/api/v1/product",productRoute)
 
 
 app.get('/start', (req, res) => {
