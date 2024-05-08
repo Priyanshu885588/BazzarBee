@@ -2,7 +2,9 @@ import React from "react";
 import Image from "../assets/logo_transparent.png";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
+import { Link } from "react-router-dom";
 export const Navbar = () => {
+  const islogin = false;
   return (
     <div className="text-center bg-black rounded-full h-16 shadow-2xl flex mb-6">
       <div className="h-full w-1/5  rounded-l-full flex justify-start gap-3 items-center pl-6">
@@ -34,15 +36,27 @@ export const Navbar = () => {
           <MdOutlineShoppingCart size="25px" />
         </div>
         <div className="h-10 w-32 bg-white rounded-full px-3 flex justify-between items-center">
-          <img
-            src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt=""
-            className="h-[30px] w-[30px] rounded-full"
-          />
-          <p className="text-black roboto">Julie</p>
-          <button>
-            <IoIosArrowDown />
-          </button>
+          {!islogin ? (
+            <>
+              <Link className="roboto font-bold" to="/userlogin">
+                Login
+              </Link>
+              <p className="roboto">/</p>
+              <Link className="roboto font-bold text-orange-500" to="/sign-up">
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="h-[30px] w-[30px] rounded-full bg-orange-400 flex justify-center items-center font-bold">
+                P
+              </p>
+              <p className="text-black roboto">Julie</p>
+              <button>
+                <IoIosArrowDown />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

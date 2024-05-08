@@ -46,16 +46,6 @@ export const SignUp = () => {
                 placeholder="Email Address"
               />
             </div>
-            <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
-              <MdOutlinePhonelinkRing className="h-5 w-5 text-gray-400" />
-              <input
-                className="pl-2 outline-none border-none"
-                type="tel"
-                name=""
-                id=""
-                placeholder="Phone number"
-              />
-            </div>
             <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
               <RiLockPasswordLine className="h-5 w-5 text-gray-400" />
               <input
@@ -66,7 +56,7 @@ export const SignUp = () => {
                 placeholder="Password"
               />
             </div>
-            <div className="flex items-center border-2 py-2 px-3 rounded-2xl mt-4">
+            <div className="flex items-center border-2 py-2 px-3 rounded-2xl mt-4 mb-2">
               <RiLockPasswordLine className="h-5 w-5 text-gray-400" />
               <input
                 className="pl-2 outline-none border-none"
@@ -76,7 +66,7 @@ export const SignUp = () => {
                 placeholder="Confirm Password"
               />
             </div>
-            <span className="text-sm ml-2 mt-4 cursor-pointer">
+            <span className="text-sm ml-2 cursor-pointer">
               Already have an account?{" "}
               <a href="#" className="hover:text-blue-500">
                 LogIn
