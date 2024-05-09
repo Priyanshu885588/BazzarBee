@@ -39,7 +39,15 @@ const ProductSchema = new mongoose.Schema({
   imageUrl:{
     type: String,
     required: true,
-  }
+  },
+  ratings: {
+    type: [Number],
+    default: [0, 0, 0, 0, 0], 
+  },
+  averageRating: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model("Product", ProductSchema);
