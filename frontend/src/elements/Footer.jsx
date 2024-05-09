@@ -8,7 +8,7 @@ import { BsTwitterX } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 export const Footer = () => {
   return (
-    <div className="h-[50vh]  mt-9 flex justify-between bg-gray-100 pt-10 px-10">
+    <div className="h-[60vh]  mt-8 flex justify-between bg-gray-100 pt-10 px-10">
       <div className="h-full flex flex-col border-r border-black">
         <img src={LogoImage} alt="" className="h-32 w-[300px]" />
         <p className="w-52 text-sm text-gray-700 roboto">

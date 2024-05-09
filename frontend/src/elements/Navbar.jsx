@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 export const Navbar = () => {
   const islogin = false;
   return (
-    <div className="text-center bg-black rounded-full h-16 shadow-2xl flex mb-6">
+    <div className="text-center bg-black rounded-full h-16 shadow-2xl flex mx-16 mt-8">
       <div className="h-full w-1/5  rounded-l-full flex justify-start gap-3 items-center pl-6">
         <img
           src={Image}
@@ -38,11 +38,14 @@ export const Navbar = () => {
         <div className="h-10 w-32 bg-white rounded-full px-3 flex justify-between items-center">
           {!islogin ? (
             <>
-              <Link className="roboto font-bold" to="/userlogin">
+              <Link className="roboto hover:font-bold" to="/userlogin">
                 Login
               </Link>
               <p className="roboto">/</p>
-              <Link className="roboto font-bold text-orange-500" to="/sign-up">
+              <Link
+                className="roboto text-orange-500 hover:font-bold"
+                to="/sign-up"
+              >
                 Sign Up
               </Link>
             </>

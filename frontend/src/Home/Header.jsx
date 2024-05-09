@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar } from "../elements/Navbar";
+
 import ElectronicsImage from "../assets/electronics.png";
 import FashionImage from "../assets/fashion.png";
 import BeautyImage from "../assets/beauty.png";
@@ -8,7 +8,6 @@ import { MdArrowOutward } from "react-icons/md";
 export const Header = () => {
   return (
     <>
-      <Navbar />
       <div className="w-full h-[72vh] flex gap-4">
         <div className="row-span-1 bg-amber-700 px-4 py-7 pl-10 h-full w-3/5 rounded-3xl shadow-2xl flex flex-col items-start justify-between gap-4">
           <div className="flex">
