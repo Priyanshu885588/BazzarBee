@@ -2,6 +2,8 @@ const User = require("../modals/user");
 const Category = require("../modals/category");
 const Product = require("../modals/product");
 const Verification = require("../modals/verification");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
@@ -198,4 +200,79 @@ const sendVerificationCodeEmail = async (email, verificationCode) => {
   }
 };
 
-module.exports = { insert, emailVerification };
+const login = async (req, res) => {
+  const { username, email, password } = req.body;
+  try {
+    if (!username && !email) {
+      return res.status(400).json({ message: "Missing username or email" });
+    }
+
+    let user;
+    user = await User.findOne({ username, email });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid username or email" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    res
+      .status(200)
+      .json({ message: "Login successful!", token, userId: user._id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const signup = async (req, res) => {
+  const { username, email, password, verificationCode, phoneNumber } = req.body;
+  try {
+    if (!username || !email || !password || !verificationCode || !phoneNumber) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(409).json({ message: "username already in use" });
+    }
+
+    const existingUser1 = await User.findOne({ email });
+    if (existingUser1) {
+      return res.status(409).json({ message: "Email already in use" });
+    }
+    const verification = await Verification.findOne({
+      verificationCode,
+      email,
+    });
+    if (!verification) {
+      return res.status(400).json({ message: "Invalid verification code" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+      phoneNumber,
+    });
+    await user.save();
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(201).json({ message: "Signup successful!", token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { insert, emailVerification, signup, login };

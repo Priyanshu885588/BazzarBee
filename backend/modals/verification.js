@@ -19,10 +19,6 @@ const VerificationSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  used: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 // Set an index on createdAt and expiresAt for efficient expiration cleanup

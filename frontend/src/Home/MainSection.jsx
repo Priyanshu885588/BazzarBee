@@ -48,7 +48,7 @@ export const MainSection = () => {
       </div>
       <div className="flex w-full h-fit flex-wrap gap-2">
         {cards.map((_, index) => (
-          <Cards />
+          <Cards key={index} />
         ))}
       </div>
       <section className="relative isolate overflow-hidden bg-white px-6 py-8 lg:px-8 rounded-2xl">
