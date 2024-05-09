@@ -43,6 +43,10 @@ const insert = async (req, res) => {
 const emailVerification = async (req, res) => {
   const { email } = req.body;
   try {
+    const existingUser1 = await User.findOne({ email });
+    if (existingUser1) {
+      return res.status(409).json({ message: "Email already in use" });
+    }
     const randomNumber = Math.floor(100000 + Math.random() * 900000);
     const verificationCode = randomNumber.toString();
     const existingVerification = await Verification.findOne({ email });
@@ -57,7 +61,9 @@ const emailVerification = async (req, res) => {
         email,
         existingVerification.verificationCode
       );
-      return res.json({ msg: "Verification code resent successfully" });
+      return res
+        .status(200)
+        .json({ message: "Verification code sent successfully" });
     }
 
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiration
@@ -71,9 +77,9 @@ const emailVerification = async (req, res) => {
     await newVerification.save();
     await sendVerificationCodeEmail(email, verificationCode);
 
-    res.json({ msg: "successfull" });
+    res.status(200).json({ message: "Verification code sent successfully" });
   } catch (err) {
-    res.status(400).json({ err: err });
+    res.status(400).json({ message: "failed to send verification code" });
   }
 };
 
@@ -268,11 +274,51 @@ const signup = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.status(201).json({ message: "Signup successful!", token });
+    res
+      .status(201)
+      .json({ message: "Signup successful!", token, userId: user._id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-module.exports = { insert, emailVerification, signup, login };
+const getUserInfo = async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: Missing or invalid token" });
+    }
+    const token = authHeader.split(" ")[1];
+    let decodedToken;
+    try {
+      decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: Invalid or expired token" });
+    }
+
+    const userId = decodedToken._id;
+
+    const userData = await User.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const data = {
+      username: userData.username,
+      email: userData.email,
+      phoneNumber: userData.phoneNumber,
+    };
+
+    return res.status(200).json({ user: data });
+  } catch (error) {
+    console.error(error); // Log errors for debugging
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { insert, emailVerification, signup, login, getUserInfo };
