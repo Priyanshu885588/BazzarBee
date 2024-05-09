@@ -172,7 +172,11 @@ export const SignUp = () => {
                   type="submit"
                   className="block w-full bg-black mt-2 py-2 rounded-2xl text-white font-semibold mb-2"
                 >
-                  SignUp
+                  {!loading ? (
+                    "Sign Up"
+                  ) : (
+                    <CgSpinnerTwoAlt className="text-white w-6 h-6 animate-spin" />
+                  )}
                 </button>
                 <span className="text-sm ml-2 hover:text-blue-500 cursor-pointer">
                   Forgot Password ?
