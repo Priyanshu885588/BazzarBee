@@ -1,4 +1,5 @@
 const Product = require("../modals/product")
+const FashionProduct = require("../modals/fashionProduct")
 
 const getBeautyProducts = async (req,res)=>{
     try{
@@ -75,8 +76,30 @@ const addRating = async (req,res)=>{
     }
 }
 
+const getAllMensFashionProducts = async (req, res) => {
+    try {
+        const products = await FashionProduct.find({
+            category: { $in: ["Men's Accessories", "Men's clothing"] }
+        });
+        res.json({ products:products,msg:"successfull"});
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
+const getAllWomensFashionProducts = async (req, res) => {
+    try {
+        const products = await FashionProduct.find({
+            category: { $in: ["Women's Accessories", "Women's Clothing"] }
+        });
+        res.json({ products:products,msg:"successfull"});
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
 
 
 
 
-module.exports = {getBeautyProducts,getElectronicProduct,getFashonProduct,getHomeProduct,addRating}
+module.exports = {getBeautyProducts,getElectronicProduct,getFashonProduct,getHomeProduct,addRating,getAllMensFashionProducts,getAllWomensFashionProducts}
