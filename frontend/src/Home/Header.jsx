@@ -1,10 +1,11 @@
 import React from "react";
-import { Navbar } from "../elements/Navbar";
+
 import ElectronicsImage from "../assets/electronics.png";
 import FashionImage from "../assets/fashion.png";
 import BeautyImage from "../assets/beauty.png";
 import HomeImage from "../assets/home.png";
 import { MdArrowOutward } from "react-icons/md";
+import { Navbar } from "../elements/Navbar";
 export const Header = () => {
   return (
     <>
