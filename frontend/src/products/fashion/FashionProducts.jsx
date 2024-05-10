@@ -1,12 +1,25 @@
 import React from "react";
 import { Cards } from "../../UI/Cards";
+import { useEffect, useState } from "react";
+import { getAllmensProducts } from "../services/api";
 export const FashionProducts = () => {
+  const [productsData, setProductsData] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await getAllmensProducts();
+        setProductsData(data.products);
+      } catch (error) {}
+    };
+    fetchProducts();
+  }, []);
   const cards = [...Array(10)]; // Create an array with 8 elements
+
   return (
-    <div>
+    <div className="p-6">
       <div className="flex w-full h-fit flex-wrap gap-4">
-        {cards.map((_, index) => (
-          <Cards key={index} />
+        {productsData.map((product) => (
+          <Cards key={product.productId} data={product} />
         ))}
       </div>
     </div>
