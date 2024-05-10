@@ -13,8 +13,6 @@ export const FashionProducts = () => {
     };
     fetchProducts();
   }, []);
-  const cards = [...Array(10)]; // Create an array with 8 elements
-
   return (
     <div className="p-6">
       <div className="flex w-full h-fit flex-wrap gap-4">

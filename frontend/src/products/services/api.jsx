@@ -10,4 +10,13 @@ const getAllmensProducts = async () => {
   }
 };
 
-export { getAllmensProducts };
+const getmensFilterData = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/fashion/men/filterdata`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { getAllmensProducts, getmensFilterData };
