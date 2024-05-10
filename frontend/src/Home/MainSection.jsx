@@ -46,11 +46,7 @@ export const MainSection = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-full h-fit flex-wrap gap-2">
-        {cards.map((_, index) => (
-          <Cards key={index} />
-        ))}
-      </div>
+      <div className="flex w-full h-fit flex-wrap gap-2"></div>
       <section className="relative isolate overflow-hidden bg-white px-6 py-8 lg:px-8 rounded-2xl">
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-indigo-100 to-white opacity-20"></div>
         <div className="absolute inset-y-0 right-1/2 -z-10 mr-16 w-200 origin-bottom-left skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:mr-28 lg:mr-0 xl:mr-16 xl:origin-center"></div>
