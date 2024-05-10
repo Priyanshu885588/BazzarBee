@@ -2,10 +2,10 @@ import React from "react";
 import { TiStarFullOutline } from "react-icons/ti";
 export const Cards = () => {
   return (
-    <div className="w-56 bg-white border border-gray-200 rounded-xl shadow">
+    <div className="w-56">
       <img
         className="w-56 rounded-2xl"
-        src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/ultra-band-unselect-gallery-1-202309_GEO_IN?wid=5120&hei=3280&fmt=p-jpg&qlt=80&.v=1693544574532"
+        src="https://thumbs.dreamstime.com/b/new-apple-watch-inches-white-background-uzhgorod-ukraine-december-line-smartwatches-designed-developed-marketed-134996286.jpg"
         alt="product image"
       />
 
@@ -27,13 +27,7 @@ export const Cards = () => {
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-gray-900 ">$599</span>
-          <a
-            href="#"
-            className="text-white bg-blue-700 focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Add to cart
-          </a>
+          <span className="text-base font-bold text-gray-900 ">$599</span>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import { Navbar } from "../elements/Navbar";
 export const Header = () => {
   return (
     <>
-      <Navbar />
+      <Navbar prop={"full"} />
       <div className="w-full h-[72vh] flex gap-4">
         <div className="row-span-1 bg-amber-700 px-4 py-7 pl-10 h-full w-3/5 rounded-3xl shadow-2xl flex flex-col items-start justify-between gap-4">
           <div className="flex">

@@ -34,6 +34,9 @@ export const SignUp = () => {
       setErrorMessage(error.response.data.message);
     } finally {
       isLoading(false);
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
     }
   };
   const handleSignUp = async (e) => {
@@ -170,7 +173,7 @@ export const SignUp = () => {
                 </span>
                 <button
                   type="submit"
-                  className="block w-full bg-black mt-2 py-2 rounded-2xl text-white font-semibold mb-2"
+                  className="w-full bg-black mt-2 py-2 rounded-2xl text-white font-semibold mb-2 flex justify-center items-center"
                 >
                   {!loading ? (
                     "Sign Up"

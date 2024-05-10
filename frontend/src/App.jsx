@@ -6,6 +6,7 @@ import { Login } from "./userAuth/login";
 import { SignUp } from "./userAuth/signUp";
 
 import "./App.css";
+import { ProductsMain } from "./products/ProductsMain";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/userlogin" element={<Login />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/categories/*" element={<ProductsMain />} />
       </Routes>
       <Footer />
     </>

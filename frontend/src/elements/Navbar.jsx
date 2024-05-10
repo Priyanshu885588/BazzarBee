@@ -5,7 +5,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getUserInfo } from "../userAuth/api";
-export const Navbar = () => {
+export const Navbar = ({ prop }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
   const [dropdown, setDropDown] = useState(false);
@@ -28,7 +28,7 @@ export const Navbar = () => {
   }, []);
 
   return (
-    <div className="text-center bg-black rounded-full h-16 shadow-2xl flex mb-8">
+    <div className={`text-center bg-black rounded-${prop} h-16 flex mb-8`}>
       <div className="h-full w-1/5  rounded-l-full flex justify-start gap-3 items-center pl-6">
         <img
           src={Image}

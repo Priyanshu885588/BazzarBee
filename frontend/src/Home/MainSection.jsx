@@ -1,5 +1,5 @@
 import React from "react";
-import { Cards } from "./UI/Cards";
+import { Cards } from "../UI/Cards";
 import LogoImage from "../assets/blacklogo.png";
 
 export const MainSection = () => {
