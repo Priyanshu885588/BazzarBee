@@ -9,6 +9,16 @@ const getAllmensProducts = async () => {
     throw error;
   }
 };
+const getMensFilteredData = async (queryString) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/fashion/filter?${queryString.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const getmensFilterData = async () => {
   try {
@@ -19,4 +29,4 @@ const getmensFilterData = async () => {
   }
 };
 
-export { getAllmensProducts, getmensFilterData };
+export { getAllmensProducts, getmensFilterData, getMensFilteredData };
