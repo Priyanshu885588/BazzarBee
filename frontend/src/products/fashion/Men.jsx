@@ -4,11 +4,15 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FashionProducts } from "./FashionProducts";
 import { getmensFilterData } from "../services/api";
 import { GiJumpingRope } from "react-icons/gi";
+import { useSearchParams } from "react-router-dom";
+
 export const Men = () => {
   const [filterData, setFilterData] = useState();
   const [priceRange, setPriceRange] = useState([]);
   const [queryString, setQueryString] = useState();
   const [isloading, setisLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
   const [selectedFilters, setSelectedFilters] = useState({
     subCategory: [],
     brands: [],
@@ -39,17 +43,22 @@ export const Men = () => {
       colors: selectedFilters.colors.join(","),
       priceRange: selectedFilters.price.join(","),
     });
-    console.log(query.toString());
     setQueryString(query);
   };
   useEffect(() => {
     const fetchFilterData = async () => {
       try {
         setisLoading(true);
+        selectedFilters["subCategory"] = [];
+
         const data = await getmensFilterData();
         setFilterData(data);
         const sum = (data.highestPrice - data.lowestPrice) / 4;
-
+        const updatedSelectedFilters = { ...selectedFilters };
+        updatedSelectedFilters["subCategory"].push(category);
+        console.log(updatedSelectedFilters);
+        setSelectedFilters(updatedSelectedFilters);
+        sendQuery(updatedSelectedFilters);
         const newPriceRange = [];
         newPriceRange.push(data.lowestPrice);
         for (let i = 1; i <= 3; i++) {
@@ -68,7 +77,7 @@ export const Men = () => {
       }
     };
     fetchFilterData();
-  }, []);
+  }, [category]);
   if (isloading) {
     return (
       <div className="h-[70vh] w-screen flex flex-col justify-center items-center gap-2">
