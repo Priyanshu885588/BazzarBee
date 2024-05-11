@@ -20,7 +20,7 @@ export const Men = () => {
   const handleCheckboxChange = (event, type, value) => {
     const isChecked = event.target.checked;
     const updatedSelectedFilters = { ...selectedFilters }; // Create a copy
-
+    console.log(isChecked);
     if (isChecked) {
       updatedSelectedFilters[type].push(value);
     } else {
@@ -28,17 +28,18 @@ export const Men = () => {
         (item) => item !== value
       );
     }
+    sendQuery(updatedSelectedFilters);
     setSelectedFilters(updatedSelectedFilters);
-    sendQuery();
   };
 
-  const sendQuery = () => {
+  const sendQuery = (selectedFilters) => {
     const query = new URLSearchParams({
       subCategory: selectedFilters.subCategory.join(","),
       brands: selectedFilters.brands.join(","),
       colors: selectedFilters.colors.join(","),
       priceRange: selectedFilters.price.join(","),
     });
+    console.log(query.toString());
     setQueryString(query);
   };
   useEffect(() => {

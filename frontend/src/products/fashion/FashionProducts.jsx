@@ -13,10 +13,8 @@ export const FashionProducts = ({ queryString }) => {
       try {
         setisLoading(true);
         if (queryString) {
-          console.log(queryString);
           const data = await getMensFilteredData(queryString);
           setProductsData(data.products);
-          console.log(data.products);
         } else {
           const data = await getAllmensProducts();
           setProductsData(data.products);
