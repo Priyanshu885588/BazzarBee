@@ -159,6 +159,34 @@ const filterDataMensClothing = async (req, res) => {
   }
 };
 
+const filterProducts = async (req,res)=>{
+  const subCategory = req.query.subCategory ? req.query.subCategory.split(',') : [];
+  const brands = req.query.brands ? req.query.brands.split(',') : [];
+  const colors = req.query.colors ? req.query.colors.split(',') : [];
+  const priceRange = req.query.priceRange || '';
+  try {
+    const filter = {};
+    if (subCategory.length > 0) filter.subCategory = { $in: subCategory };
+    if (brands.length > 0) filter.brandName = { $in: brands };
+    if (colors.length > 0) filter.color = { $in: colors };
+    if (priceRange) {
+        const [minPrice, maxPrice] = priceRange.split('-');  
+        if (minPrice && maxPrice) {
+            filter.price = { $gte: parseFloat(minPrice), $lte: parseFloat(maxPrice) };
+        } else if (minPrice) {
+            filter.price = { $gte: parseFloat(minPrice) };
+        } else if (maxPrice) {
+            filter.price = { $lte: parseFloat(maxPrice) };
+        }
+    }
+    const products = await FashionProduct.find(filter);
+    res.json({ products:products,msg:"products found successfully!!!" });
+} catch (error) {
+    res.status(400).json({ error: error.message });
+} 
+
+}
+
 module.exports = {
   getBeautyProducts,
   getElectronicProduct,
@@ -168,4 +196,5 @@ module.exports = {
   getAllMensFashionProducts,
   getAllWomensFashionProducts,
   filterDataMensClothing,
+  filterProducts
 };

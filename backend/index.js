@@ -19,7 +19,7 @@ app.get("/start", (req, res) => {
   res.send("Process completed successfully!");
 });
 
-// Start the server
+
 const port = process.env.PORT || 3000; // Use environment variable or default port 3000
 const start = async () => {
   try {
