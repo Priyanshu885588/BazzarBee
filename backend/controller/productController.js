@@ -168,7 +168,10 @@ const filterProducts = async (req,res)=>{
     const filter = {};
     if (subCategory.length > 0) filter.subCategory = { $in: subCategory };
     if (brands.length > 0) filter.brandName = { $in: brands };
-    if (colors.length > 0) filter.color = { $in: colors };
+    if (colors.length > 0) {
+      const colorRegex = colors.map(color => new RegExp(color, 'i'));
+      filter.color = { $in: colorRegex };
+  }
     if (priceRange) {
         const [minPrice, maxPrice] = priceRange.split('-');  
         if (minPrice && maxPrice) {
