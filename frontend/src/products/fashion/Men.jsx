@@ -4,19 +4,16 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FashionProducts } from "./FashionProducts";
 import { getmensFilterData } from "../services/api";
 import { GiJumpingRope } from "react-icons/gi";
-import { useSearchParams } from "react-router-dom";
 
-export const Men = () => {
+export const Men = (prop) => {
   const [filterData, setFilterData] = useState();
   const [priceRange, setPriceRange] = useState([]);
   const [queryString, setQueryString] = useState();
   const [isloading, setisLoading] = useState(false);
-  const [searchParams] = useSearchParams();
-  const category = searchParams.get("category");
   const [selectedFilters, setSelectedFilters] = useState({
-    subCategory: [],
+    subCategory: [prop.category],
     brands: [],
-    colors: [], // Add other filter properties if needed
+    colors: [],
     price: [],
   });
   const [isError, setisError] = useState(false);
@@ -24,7 +21,7 @@ export const Men = () => {
   const handleCheckboxChange = (event, type, value) => {
     const isChecked = event.target.checked;
     const updatedSelectedFilters = { ...selectedFilters }; // Create a copy
-    console.log(isChecked);
+
     if (isChecked) {
       updatedSelectedFilters[type].push(value);
     } else {
@@ -49,16 +46,12 @@ export const Men = () => {
     const fetchFilterData = async () => {
       try {
         setisLoading(true);
-        selectedFilters["subCategory"] = [];
-
         const data = await getmensFilterData();
         setFilterData(data);
         const sum = (data.highestPrice - data.lowestPrice) / 4;
-        const updatedSelectedFilters = { ...selectedFilters };
-        updatedSelectedFilters["subCategory"].push(category);
-        console.log(updatedSelectedFilters);
-        setSelectedFilters(updatedSelectedFilters);
-        sendQuery(updatedSelectedFilters);
+        if (selectedFilters.subCategory.length > 0) {
+          sendQuery(selectedFilters);
+        }
         const newPriceRange = [];
         newPriceRange.push(data.lowestPrice);
         for (let i = 1; i <= 3; i++) {
@@ -77,7 +70,7 @@ export const Men = () => {
       }
     };
     fetchFilterData();
-  }, [category]);
+  }, [selectedFilters]);
   if (isloading) {
     return (
       <div className="h-[70vh] w-screen flex flex-col justify-center items-center gap-2">
@@ -211,17 +204,7 @@ export const Men = () => {
         )}
         <div className="w-5/6">
           <div className="border-b pt-4 pb-6 h-12 flex gap-1 items-center justify-between px-4">
-            <div className="flex items-center capitalize gap-4">
-              <span className="flex items-center gap-2">
-                size <IoIosArrowDown />
-              </span>
-              <span className="flex items-center gap-2">
-                Origin <IoIosArrowDown />
-              </span>
-              <span className="flex items-center gap-2">
-                Pattern <IoIosArrowDown />
-              </span>
-            </div>
+            <div className="flex items-center capitalize gap-4"></div>
             <div className="mr-4">
               <button className="py-2 px-4 border-2 flex items-center gap-8 font-normal">
                 Sort by : Recommended <IoIosArrowDown />

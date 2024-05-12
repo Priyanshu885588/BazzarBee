@@ -54,7 +54,7 @@ export const FashionProducts = ({ queryString }) => {
       <div className="flex w-full h-fit flex-wrap gap-4">
         {productsData.length > 0 ? (
           productsData.map((product) => (
-            <Cards key={product.productId} data={product} />
+            <Cards key={product._id} data={product} />
           ))
         ) : (
           <p className="text-center w-full">No products available</p>

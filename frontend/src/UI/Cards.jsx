@@ -2,7 +2,7 @@ import React from "react";
 import { TiStarFullOutline } from "react-icons/ti";
 export const Cards = ({ data }) => {
   return (
-    <div className="w-56">
+    <div className="w-56 hover:scale-95 cursor-pointer transition-all duration-200">
       <img
         className="w-[220px] h-[300px]"
         src={data.imageUrl}
