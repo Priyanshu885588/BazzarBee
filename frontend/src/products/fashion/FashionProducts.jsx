@@ -3,10 +3,16 @@ import { Cards } from "../../UI/Cards";
 import { useEffect, useState } from "react";
 import { TbCube3dSphere } from "react-icons/tb";
 import { getAllmensProducts, getMensFilteredData } from "../services/api";
+import { useNavigate } from "react-router-dom";
+
 export const FashionProducts = ({ queryString }) => {
   const [productsData, setProductsData] = useState([]);
   const [isloading, setisLoading] = useState(false);
   const [isError, setisError] = useState(false);
+  const navigate = useNavigate();
+  const handleChange = (id) => {
+    navigate(`/categories/men/singleProduct?id=${id}`);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -54,7 +60,9 @@ export const FashionProducts = ({ queryString }) => {
       <div className="flex w-full h-fit flex-wrap gap-4">
         {productsData.length > 0 ? (
           productsData.map((product) => (
-            <Cards key={product._id} data={product} />
+            <div key={product._id} onClick={() => handleChange(product._id)}>
+              <Cards data={product} />
+            </div>
           ))
         ) : (
           <p className="text-center w-full">No products available</p>

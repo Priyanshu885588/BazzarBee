@@ -57,3 +57,16 @@ body {
   background-size: cover;
   background-position: center;
 }
+
+.comeback-btn {
+  animation: entry 1s forwards;
+}
+
+@keyframes entry {
+  0% {
+    left: -90%;
+  }
+  100% {
+    left: -1rem;
+  }
+}

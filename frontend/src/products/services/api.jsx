@@ -29,4 +29,18 @@ const getmensFilterData = async () => {
   }
 };
 
-export { getAllmensProducts, getmensFilterData, getMensFilteredData };
+const getSingleProduct = async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}/single-product?Id=${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  getAllmensProducts,
+  getmensFilterData,
+  getMensFilteredData,
+  getSingleProduct,
+};
