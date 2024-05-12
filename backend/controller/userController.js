@@ -9,41 +9,77 @@ require("dotenv").config();
 
 const FashionProduct = require("../modals/fashionProduct")
 
-const insert = async (req, res) => {
-  const {
-    productId,
-    name,
-    description,
-    price,
-    quantityAvailable,
-    sellerId,
-    subCategory,
-    brandName,
-    color,
-    category,
-    imageUrl,
-  } = req.body;
+// const insert = async (req, res) => {
+//   const {
+//     productId,
+//     name,
+//     description,
+//     price,
+//     quantityAvailable,
+//     sellerId,
+//     subCategory,
+//     brandName,
+//     color,
+//     category,
+//     imageUrl,
+//   } = req.body;
 
-  if (
-    !productId ||
-    !name ||
-    !description ||
-    !price ||
-    !quantityAvailable ||
-    !sellerId ||
-    !subCategory ||
-    !brandName ||
-    !color ||
-    !category ||
-    !imageUrl
-  ) {
-    return res.status(400).json({ error: "Please provide all required fields." });
+//   if (
+//     !productId ||
+//     !name ||
+//     !description ||
+//     !price ||
+//     !quantityAvailable ||
+//     !sellerId ||
+//     !subCategory ||
+//     !brandName ||
+//     !color ||
+//     !category ||
+//     !imageUrl
+//   ) {
+//     return res.status(400).json({ error: "Please provide all required fields." });
+//   }
+
+//   try {
+    
+//     const product = await FashionProduct.create(req.body);
+//     res.json({ product, msg: "Successfully created product." });
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
+
+
+const insert = async (req, res) => {
+  const products = req.body;
+
+  if (!Array.isArray(products) || products.length === 0) {
+    return res.status(400).json({ error: "Please provide an array of products." });
+  }
+
+  const validationErrors = products.filter(product => {
+    return (
+      !product.productId ||
+      !product.name ||
+      !product.description ||
+      !product.price ||
+      !product.quantityAvailable ||
+      !product.sellerId ||
+      !product.subCategory ||
+      !product.brandName ||
+      !product.color ||
+      !product.category ||
+      !product.imageUrl
+    );
+  });
+
+  if (validationErrors.length > 0) {
+    return res.status(400).json({ error: "Some products are missing required fields." });
   }
 
   try {
-    
-    const product = await FashionProduct.create(req.body);
-    res.json({ product, msg: "Successfully created product." });
+    const insertedProducts = await (products.map(product => FashionProduct.create(product)));
+    res.json({ products: insertedProducts, msg: "Successfully created products." });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

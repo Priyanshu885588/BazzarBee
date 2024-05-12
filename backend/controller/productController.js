@@ -195,6 +195,21 @@ const filterProducts = async (req, res) => {
   }
 };
 
+const getSingleProduct = async (req,res)=>{
+  const {Id} = req.query;
+  if(!Id){
+    return res.status(400).json({
+      msg: "ProductId is required",
+    });
+  }
+  try {
+    const product = await FashionProduct.find({_id:Id})
+    res.json({ product: product, msg: "product found successfully!!!" });
+  } catch (error) {
+    res.status(400).json({ error: error.message});
+  }
+}
+
 module.exports = {
   getBeautyProducts,
   getElectronicProduct,
@@ -205,4 +220,5 @@ module.exports = {
   getAllWomensFashionProducts,
   filterDataMensClothing,
   filterProducts,
+  getSingleProduct,
 };
