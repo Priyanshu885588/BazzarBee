@@ -10,11 +10,12 @@ export const SingleProduct = () => {
   const [searchParams] = useSearchParams();
   const [productData, setProductData] = useState();
   const id = searchParams.get("id");
-
   useEffect(() => {
     const singleFetch = async () => {
       try {
         const data = await getSingleProduct(id);
+        const starCount = Math.floor(data.product[0].averageRating);
+        data.product[0]["starCount"] = starCount;
         setProductData(data.product[0]);
       } catch (error) {
         console.log(error.response);
@@ -52,7 +53,7 @@ export const SingleProduct = () => {
               />
             </div>
           </div>
-          <div className="w-fit px-2 flex flex-col justify-start items-start lato gap-6 border-r border-gray-700 ml-10 relative z-10 bg-white ">
+          <div className="w-1/3 px-2 flex flex-col justify-start items-start lato gap-6 border-r border-gray-700 ml-10 relative z-10 bg-white ">
             <div className="flex flex-col w-full  h-2/5 gap-2 ">
               <h3 className="uppercase">{productData.brandName}</h3>
               <h2 className="text-2xl font-bold">{productData.name}</h2>
@@ -60,11 +61,12 @@ export const SingleProduct = () => {
                 {productData.description}
               </p>
               <div className="flex items-center h-10 border-b border-black">
-                <FaStar className="text-yellow-500 h-4 w-4" />
-                <FaStar className="text-yellow-500 h-4 w-4" />
-                <FaStar className="text-yellow-500 h-4 w-4" />
-                <FaStar className="text-yellow-500 h-4 w-4" />
-                <FaStar className="text-yellow-500 h-4 w-4" />
+                {[...Array(productData.starCount)].map((_, index) => (
+                  <FaStar key={index} className="text-yellow-500 h-4 w-4" />
+                ))}
+                {[...Array(5 - productData.starCount)].map((_, index) => (
+                  <FaStar key={index} className="text-gray-300 h-4 w-4" />
+                ))}
                 <p className=" ml-2">{productData.averageRating}</p>
               </div>
             </div>
@@ -91,46 +93,34 @@ export const SingleProduct = () => {
                 ></div>
               </div>
               <div className="flex flex-col gap-2">
-                <p className="font-semibold">Size</p>
-                <div className="flex flex-col">
-                  <div className="flex gap-2">
-                    {productData.quantityAvailable.sizes.map((size, index) => (
-                      <button
-                        className="py-1 px-2 border-2 border-gray-300 rounded-t-lg hover:scale-110 w-12 text-sm"
-                        key={index}
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    {productData.quantityAvailable.quantities.map(
-                      (size, index) => (
-                        <button
-                          className="py-1 px-2 border-2 border-gray-300 rounded-b-lg w-12 text-sm"
-                          key={index}
-                          disabled
-                        >
-                          {size}
-                        </button>
-                      )
-                    )}
-                  </div>
+                <div className="font-semibold flex gap-2">
+                  Size
+                  <button className="text-xs text-yellow-500 w-fit font-light">
+                    size guide
+                  </button>
                 </div>
-                <button className="text-xs text-yellow-500 w-fit">
-                  Size Guide
-                </button>
+
+                <div className="flex gap-2">
+                  {productData.quantityAvailable.sizes.map((size, index) => (
+                    <button
+                      className="py-1 px-2 border-2 border-gray-300 rounded-t-lg hover:scale-110 w-12 text-sm"
+                      key={index}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
             <div></div>
           </div>
           <div className="h-full w-1/6">
             <div className="h-1/2 w-full flex flex-col gap-3">
-              <button className="bg-black text-white flex rounded-full py-2 pr-8 pl-10 items-center gap-2 relative -left-4 shadow-inner w-fit hover:bg-orange-800 hover:border-2 overflow-hidden comeback-btn">
+              <button className="bg-black text-white flex rounded-full py-2 pr-8 pl-10 items-center gap-2 relative -left-4 shadow-inner w-fit hover:bg-white hover:text-black overflow-hidden comeback-btn">
                 <BsBagHeart />
                 Add to cart
               </button>
-              <button className="bg-pink-100 text-black  flex rounded-full py-2 pr-8 pl-10 items-center gap-2 relative -left-4 shadow-inner w-fit hover:bg-white hover:border-2 overflow-hidden comeback-btn">
+              <button className="bg-pink-100 text-black  flex rounded-full py-2 pr-8 pl-10 items-center gap-2 relative -left-4 shadow-inner w-fit hover:bg-white  overflow-hidden comeback-btn">
                 <FaHandHoldingHeart />
                 Wishlist
               </button>
