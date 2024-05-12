@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const FashionProductSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     unique: true,
+    default: () => new mongoose.Types.ObjectId(),
   },
   name: {
     type: String,

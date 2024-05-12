@@ -7,11 +7,10 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-const FashionProduct = require("../modals/fashionProduct")
+const FashionProduct = require("../modals/fashionProduct");
 
 const insert = async (req, res) => {
   const {
-    productId,
     name,
     description,
     price,
@@ -25,7 +24,6 @@ const insert = async (req, res) => {
   } = req.body;
 
   if (
-    !productId ||
     !name ||
     !description ||
     !price ||
@@ -37,20 +35,18 @@ const insert = async (req, res) => {
     !category ||
     !imageUrl
   ) {
-    return res.status(400).json({ error: "Please provide all required fields." });
+    return res
+      .status(400)
+      .json({ error: "Please provide all required fields." });
   }
 
   try {
-    
     const product = await FashionProduct.create(req.body);
     res.json({ product, msg: "Successfully created product." });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
-
-
-
 
 const emailVerification = async (req, res) => {
   const { email } = req.body;
