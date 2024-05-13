@@ -5,6 +5,7 @@ export const FilterUI = ({
   handleCheckboxChange,
   selectedFilters,
   priceRange,
+  keepChecked,
 }) => {
   return (
     <>
@@ -21,7 +22,9 @@ export const FilterUI = ({
                   <input
                     type="checkbox"
                     className="capitalize"
-                    checked={selectedFilters.subCategory.includes(data)}
+                    checked={
+                      selectedFilters.subCategory.includes(data) || keepChecked
+                    }
                     onChange={(event) =>
                       handleCheckboxChange(event, "subCategory", data)
                     }

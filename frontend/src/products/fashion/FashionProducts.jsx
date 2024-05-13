@@ -19,6 +19,7 @@ export const FashionProducts = ({ queryString }) => {
       try {
         setisLoading(true);
         if (queryString) {
+          console.log(queryString.toString());
           const data = await getMensFilteredData(queryString);
           setProductsData(data.products);
         } else {

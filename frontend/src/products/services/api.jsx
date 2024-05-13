@@ -29,9 +29,29 @@ const getmensFilterData = async () => {
   }
 };
 
+const getCategoryData = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/category-data`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getSingleProduct = async (id) => {
   try {
     const response = await axios.get(`${API_URL}/single-product?Id=${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getParticulatCategoryProducts = async (category, subCategory) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/category-products?category=${category}&subCategory=${subCategory}`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -43,4 +63,6 @@ export {
   getmensFilterData,
   getMensFilteredData,
   getSingleProduct,
+  getCategoryData,
+  getParticulatCategoryProducts,
 };

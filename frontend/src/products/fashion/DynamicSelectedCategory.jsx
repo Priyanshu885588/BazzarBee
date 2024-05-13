@@ -1,18 +1,23 @@
+import { useSearchParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { FashionProducts } from "./FashionProducts";
-import { getmensFilterData } from "../services/api";
+import { getParticulatCategoryProducts } from "../services/api";
 import { GiJumpingRope } from "react-icons/gi";
 import { FilterUI } from "../../UI/FilterUI";
-
-export const Men = () => {
+export const DynamicSelectedCategory = () => {
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
+  const subCategory = searchParams.get("subCategory");
+  const capitalizedSubCategory =
+    subCategory.charAt(0).toUpperCase() + subCategory.slice(1);
   const [filterData, setFilterData] = useState();
   const [priceRange, setPriceRange] = useState([]);
   const [queryString, setQueryString] = useState();
   const [isloading, setisLoading] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
-    subCategory: [],
+    subCategory: [capitalizedSubCategory.split("-")[1]],
     brands: [],
     colors: [],
     price: [],
@@ -35,10 +40,6 @@ export const Men = () => {
   };
 
   const sendQuery = (selectedFilters) => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
     const query = new URLSearchParams({
       subCategory: selectedFilters.subCategory.join(","),
       brands: selectedFilters.brands.join(","),
@@ -47,12 +48,60 @@ export const Men = () => {
     });
     setQueryString(query);
   };
+
   useEffect(() => {
+    const updatedSelectedFilters = { ...selectedFilters };
+    updatedSelectedFilters["subCategory"] = [
+      capitalizedSubCategory.substring(capitalizedSubCategory.indexOf("-") + 1),
+    ];
+    sendQuery(updatedSelectedFilters);
     const fetchFilterData = async () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
       try {
         setisLoading(true);
-        const data = await getmensFilterData();
-        setFilterData(data);
+        const data = await getParticulatCategoryProducts(
+          category,
+          capitalizedSubCategory
+        );
+        setFilterData(data.filterdata);
+        const sum = (data.highestPrice - data.lowestPrice) / 4;
+        const newPriceRange = [];
+        newPriceRange.push(data.lowestPrice);
+        for (let i = 1; i <= 3; i++) {
+          newPriceRange.push(sum + newPriceRange[i - 1]);
+        }
+        newPriceRange.push(data.highestPrice);
+        setPriceRange(newPriceRange);
+      } catch (error) {
+        console.log("Something Went wrong");
+      } finally {
+        setisLoading(false);
+        setTimeout(() => {
+          setisError(false);
+        }, 4000);
+      }
+    };
+    fetchFilterData();
+    updatedSelectedFilters["subCategory"] = [capitalizedSubCategory];
+    setSelectedFilters(updatedSelectedFilters);
+  }, [subCategory, searchParams]);
+
+  useEffect(() => {
+    const fetchFilterData = async () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      try {
+        setisLoading(true);
+        const data = await getParticulatCategoryProducts(
+          category,
+          capitalizedSubCategory
+        );
+        setFilterData(data.filterdata);
         const sum = (data.highestPrice - data.lowestPrice) / 4;
         if (selectedFilters.subCategory.length > 0) {
           sendQuery(selectedFilters);
@@ -62,7 +111,6 @@ export const Men = () => {
         for (let i = 1; i <= 3; i++) {
           newPriceRange.push(sum + newPriceRange[i - 1]);
         }
-
         newPriceRange.push(data.highestPrice);
         setPriceRange(newPriceRange);
       } catch (error) {
@@ -118,7 +166,7 @@ export const Men = () => {
           handleCheckboxChange={handleCheckboxChange}
           selectedFilters={selectedFilters}
           priceRange={priceRange}
-          keepChecked={false}
+          keepChecked={true}
         />
         <div className="w-5/6">
           <div className="border-b pt-4 pb-6 h-12 flex gap-1 items-center justify-between px-4">
