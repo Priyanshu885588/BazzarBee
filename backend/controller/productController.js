@@ -81,7 +81,7 @@ const addRating = async (req, res) => {
     });
   }
   try {
-    const product = await Product.findOneAndUpdate(
+    const product = await FashionProduct.findOneAndUpdate(
       { productId: productId },
       { $inc: { [`ratings.${noOfStars - 1}`]: 1 } },
       { new: true }
@@ -210,6 +210,33 @@ const getSingleProduct = async (req,res)=>{
   }
 }
 
+const getCategoryProducts = async (req,res)=>{
+  const {category,subCategory} = req.query;
+  if(!category||!subCategory){
+    res.status(400).json({msg:"category,subCategory is required"})
+  }
+  let product;
+  try {
+    switch (category) {
+      case "fashion":
+          const [sub_category,product_type] = subCategory.split("-");
+          const regexPattern = new RegExp(sub_category);
+          product = await FashionProduct.find({ category: regexPattern, subCategory: product_type });
+        break;
+    
+      default:
+         return res.status(400).json({msg:"Invalid Category!!!"});
+    }
+    if(product.length === 0){
+      return res.status(202).json({msg:"No products found"})
+    }
+    res.status(200).json({product:product,msg:"Products found successfully..."})
+    
+  } catch (error) {
+    res.status(400).json({ error: error.message});
+  }
+}
+
 module.exports = {
   getBeautyProducts,
   getElectronicProduct,
@@ -220,5 +247,6 @@ module.exports = {
   getAllWomensFashionProducts,
   filterDataMensClothing,
   filterProducts,
-  getSingleProduct
+  getSingleProduct,
+  getCategoryProducts,
 };

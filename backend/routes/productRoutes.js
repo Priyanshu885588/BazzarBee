@@ -11,6 +11,7 @@ const {
   filterDataMensClothing,
   filterProducts,
   getSingleProduct,
+  getCategoryProducts,
 } = require("../controller/productController");
 
 router.route("/beauty").get(getBeautyProducts);
@@ -23,5 +24,6 @@ router.route("/fashion/women").get(getAllWomensFashionProducts);
 router.route("/fashion/men/filterdata").get(filterDataMensClothing);
 router.route("/fashion/filter").get(filterProducts);
 router.route("/single-product").get(getSingleProduct);
+router.route("/category-products").get(getCategoryProducts);
 
 module.exports = router;
