@@ -97,7 +97,7 @@ const addRating = async (req, res) => {
     const averageRating =
       sum / product.ratings.reduce((total, rating) => total + rating, 0);
 
-    product.averageRating = averageRating;
+    product.averageRating = averageRating.toFixed(1);
     await product.save();
 
     res.status(200).json({ msg: "Rating added successfully", product });
@@ -195,47 +195,51 @@ const filterProducts = async (req, res) => {
   }
 };
 
-const getSingleProduct = async (req,res)=>{
-  const {Id} = req.query;
-  if(!Id){
+const getSingleProduct = async (req, res) => {
+  const { Id } = req.query;
+  if (!Id) {
     return res.status(400).json({
       msg: "ProductId is required",
     });
   }
   try {
-    const product = await FashionProduct.find({_id:Id})
+    const product = await FashionProduct.find({ _id: Id });
     res.json({ product: product, msg: "product found successfully!!!" });
   } catch (error) {
-    res.status(400).json({ error: error.message});
+    res.status(400).json({ error: error.message });
   }
-}
+};
 
-const getCategoryProducts = async (req,res)=>{
-  const {category,subCategory} = req.query;
-  if(!category||!subCategory){
-    res.status(400).json({msg:"category,subCategory is required"})
+const getCategoryProducts = async (req, res) => {
+  const { category, subCategory } = req.query;
+  if (!category || !subCategory) {
+    res.status(400).json({ msg: "category,subCategory is required" });
   }
   let product;
   try {
     switch (category) {
       case "fashion":
-          const [sub_category,product_type] = subCategory.split("-");
-          const regexPattern = new RegExp(sub_category);
-          product = await FashionProduct.find({ category: regexPattern, subCategory: product_type });
+        const [sub_category, product_type] = subCategory.split("-");
+        const regexPattern = new RegExp(sub_category);
+        product = await FashionProduct.find({
+          category: regexPattern,
+          subCategory: product_type,
+        });
         break;
-    
+
       default:
-         return res.status(400).json({msg:"Invalid Category!!!"});
+        return res.status(400).json({ msg: "Invalid Category!!!" });
     }
-    if(product.length === 0){
-      return res.status(202).json({msg:"No products found"})
+    if (product.length === 0) {
+      return res.status(202).json({ msg: "No products found" });
     }
-    res.status(200).json({product:product,msg:"Products found successfully..."})
-    
+    res
+      .status(200)
+      .json({ product: product, msg: "Products found successfully..." });
   } catch (error) {
-    res.status(400).json({ error: error.message});
+    res.status(400).json({ error: error.message });
   }
-}
+};
 
 module.exports = {
   getBeautyProducts,

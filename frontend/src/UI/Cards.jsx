@@ -16,7 +16,7 @@ export const Cards = ({ data }) => {
         <div className="flex justify-between mt-2.5 mb-3">
           <span className="bg-blue-50 text-blue-800 font-semibold px-2.5 py-0.5 flex items-center justify-center gap-1">
             <TiStarFullOutline className="text-orange-400" />
-            <p>{data.averageRating}</p>
+            <p>{data.averageRating.toFixed(1)}</p>
           </span>
           <div className="flex items-center justify-between mr-2">
             <span className="text-sm font-bold text-gray-900 ">

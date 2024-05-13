@@ -1,18 +1,21 @@
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-
+import { TbCube3dSphere } from "react-icons/tb";
 import { getMensFilteredData, getSingleProduct } from "../services/api";
 import { FaStar } from "react-icons/fa";
 import { useState } from "react";
 import { BsBagHeart } from "react-icons/bs";
 import { FaHandHoldingHeart } from "react-icons/fa";
-
+import { SmallCards } from "../../UI/SmallCards";
 import { Cards } from "../../UI/Cards";
 
 export const SingleProduct = () => {
   const [searchParams] = useSearchParams();
   const [productData, setProductData] = useState();
   const [suggestionProductsData, setSuggestionProductsData] = useState([]);
+  const [suggestionProductsData1, setSuggestionProductsData1] = useState([]);
+  const [isloading, setisLoading] = useState(false);
+  const [isError, setisError] = useState(false);
   const id = searchParams.get("id");
 
   const singleFetch = async (id) => {
@@ -21,51 +24,61 @@ export const SingleProduct = () => {
       behavior: "smooth",
     });
     try {
+      setisLoading(true);
       const data = await getSingleProduct(id);
       const starCount = Math.floor(data.product[0].averageRating);
       data.product[0]["starCount"] = starCount;
       setProductData(data.product[0]);
+      const sug1data = await getMensFilteredData(`subCategory=Shoes,Belts`);
+      console.log(sug1data);
+      setSuggestionProductsData1(sug1data.products);
       const sugdata = await getMensFilteredData(
         `subCategory=${data.product[0].subCategory}`
       );
       setSuggestionProductsData(sugdata.products);
     } catch (error) {
       console.log(error.response);
+      setisError(true);
+    } finally {
+      setisLoading(false);
+      setTimeout(() => {
+        setisError(false);
+      }, 4000);
     }
   };
   useEffect(() => {
     singleFetch(id);
   }, []);
 
+  if (isError) {
+    return (
+      <div className="flex w-full h-[50vh] justify-center items-center">
+        <p className="text-red-500 roboto font-light">
+          Error in fetching products
+        </p>
+      </div>
+    );
+  }
+
+  if (isloading) {
+    return (
+      <div className="flex w-full h-[50vh] justify-center items-center">
+        <TbCube3dSphere className="h-6 w-6 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-screen px-6">
       {productData && (
         <>
-          <div className="flex w-full h-[70vh]">
-            <div className="w-1/2 flex gap-2">
-              <div className="w-1/2 flex justify-end">
-                <img
-                  src={`${productData.imageUrl}`}
-                  alt="Product image"
-                  className="w-[85%] h-[80%] rounded-2xl"
-                />
-              </div>
-              <div className="flex w-1/2 h-full relative flex-wrap">
-                <div className="flex w-full justify-between h-1/2 relative gap-2">
-                  <img
-                    className="w-1/2 h-full rounded-xl"
-                    src="https://firebasestorage.googleapis.com/v0/b/bazzarbee-192fe.appspot.com/o/Fashion%2FMens%2FClothing%2FShirts%2FMen's%20Casual%20Cotton%20Shirt%2F1st.jpeg?alt=media&token=67c07729-e481-4443-9d8b-54c398652931"
-                  />
-                  <img
-                    className="w-1/2 h-full rounded-xl"
-                    src="https://firebasestorage.googleapis.com/v0/b/bazzarbee-192fe.appspot.com/o/Fashion%2FMens%2FClothing%2FShirts%2FMen's%20Casual%20Cotton%20Shirt%2F2nd.jpeg?alt=media&token=f730faa3-5a9f-46f8-ad4c-7bbcbc0a2ffa"
-                  />
-                </div>
-                <img
-                  className="w-11/12 h-[45%] rounded-xl"
-                  src="https://firebasestorage.googleapis.com/v0/b/bazzarbee-192fe.appspot.com/o/Fashion%2FMens%2FClothing%2FShirts%2FMen's%20Casual%20Cotton%20Shirt%2F88.jpeg?alt=media&token=372ff3ec-99ce-4e68-8a5e-0ccbacd1b90f"
-                />
-              </div>
+          <div className="flex w-full h-[70vh] justify-center">
+            <div className="w-1/4 flex gap-2 justify-end">
+              <img
+                src={`${productData.imageUrl}`}
+                alt="Product image"
+                className="w-[100%] h-[100%] rounded-2xl"
+              />
             </div>
             <div className="w-1/3 px-2 flex flex-col justify-start items-start lato gap-6 border-r border-gray-700 ml-10 relative z-10 bg-white ">
               <div className="flex flex-col w-full  h-2/5 gap-2 ">
@@ -81,7 +94,9 @@ export const SingleProduct = () => {
                   {[...Array(5 - productData.starCount)].map((_, index) => (
                     <FaStar key={index} className="text-gray-300 h-4 w-4" />
                   ))}
-                  <p className=" ml-2">{productData.averageRating}</p>
+                  <p className=" ml-2">
+                    {productData.averageRating.toFixed(1)}
+                  </p>
                 </div>
               </div>
               <div className="flex flex-col gap-2 border-b w-1/2 pb-2">
@@ -114,7 +129,7 @@ export const SingleProduct = () => {
                     </button>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     {productData.quantityAvailable.sizes.map((size, index) => (
                       <button
                         className="py-1 px-2 border-2 border-gray-300 rounded-t-lg hover:scale-110 w-12 text-sm"
@@ -128,8 +143,8 @@ export const SingleProduct = () => {
               </div>
               <div></div>
             </div>
-            <div className="h-full w-1/6">
-              <div className="h-1/2 w-full flex flex-col gap-3">
+            <div className="h-full w-1/3">
+              <div className="h-1/3 w-full flex flex-col gap-3">
                 <button className="bg-black text-white flex rounded-full py-2 pr-8 pl-10 items-center gap-2 relative -left-4 shadow-inner w-fit hover:bg-white hover:text-black overflow-hidden comeback-btn">
                   <BsBagHeart />
                   Add to cart
@@ -138,6 +153,29 @@ export const SingleProduct = () => {
                   <FaHandHoldingHeart />
                   Wishlist
                 </button>
+              </div>
+              <div className="h-2/3 w-full relative">
+                <div className="p-4 h-fit">
+                  <h5 className="uppercase font-semibold mb-4">
+                    Featured products
+                  </h5>
+                  <div className="flex w-full h-fit gap-4 overflow-x-scroll">
+                    {suggestionProductsData1.length > 0 ? (
+                      suggestionProductsData1.map((product) => (
+                        <div
+                          key={product._id}
+                          onClick={() => singleFetch(product._id)}
+                        >
+                          <SmallCards data={product} />
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-center w-full">
+                        No products available
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -155,7 +193,7 @@ export const SingleProduct = () => {
                     ))}
                   </div>
                   <p className=" ml-2 text-2xl font-extrabold">
-                    {productData.averageRating}
+                    {productData.averageRating.toFixed(1)}
                   </p>
                 </div>
                 <div className="flex pt-4 border-t border-black h-fit flex-col">
