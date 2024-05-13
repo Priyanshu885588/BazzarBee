@@ -12,6 +12,7 @@ const {
   filterProducts,
   getSingleProduct,
   getCategoryProducts,
+  catgoriesData,
 } = require("../controller/productController");
 
 router.route("/beauty").get(getBeautyProducts);
@@ -25,5 +26,6 @@ router.route("/fashion/men/filterdata").get(filterDataMensClothing);
 router.route("/fashion/filter").get(filterProducts);
 router.route("/single-product").get(getSingleProduct);
 router.route("/category-products").get(getCategoryProducts);
+router.route("/category-data").get(catgoriesData);
 
 module.exports = router;

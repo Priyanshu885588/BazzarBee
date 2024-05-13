@@ -128,6 +128,37 @@ const getAllWomensFashionProducts = async (req, res) => {
   }
 };
 
+const catgoriesData = async (req, res) => {
+  try {
+    const menClothing = await FashionProduct.find({
+      category: { $in: ["Men's Accessories", "Men's clothing"] },
+    });
+    const WomenClothing = await FashionProduct.find({
+      category: { $in: ["Women's Accessories", "Women's clothing"] },
+    });
+    const subcategories = [
+      new Set(),
+      new Set(),
+      new Set(),
+      new Set(),
+      new Set(),
+      new Set(),
+    ];
+    for (const product of menClothing) {
+      subcategories[0].add(product.subCategory);
+    }
+    for (const product of WomenClothing) {
+      subcategories[1].add(product.subCategory);
+    }
+    const subcategoriesArray = subcategories.map((set) => Array.from(set));
+    res.status(200).json({
+      subcategories: subcategoriesArray,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "unable to fetch data" });
+  }
+};
+
 const filterDataMensClothing = async (req, res) => {
   try {
     const menClothing = await FashionProduct.find({
@@ -253,4 +284,5 @@ module.exports = {
   filterProducts,
   getSingleProduct,
   getCategoryProducts,
+  catgoriesData,
 };
