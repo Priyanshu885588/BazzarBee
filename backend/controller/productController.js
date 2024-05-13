@@ -247,6 +247,7 @@ const getCategoryProducts = async (req, res) => {
     res.status(400).json({ msg: "category,subCategory is required" });
   }
   let product;
+  let filterdata;
   try {
     switch (category) {
       case "fashion":
@@ -256,6 +257,26 @@ const getCategoryProducts = async (req, res) => {
           category: regexPattern,
           subCategory: product_type,
         });
+        const brands = new Set(); // Use Set for unique values
+        const subcategories = new Set();
+        const colors = new Set();
+        let highestPrice = 0;
+        let lowestPrice = 10000000;
+
+        for (const pro of product) {
+          brands.add(pro.brandName);
+          subcategories.add(pro.subCategory);
+          colors.add(pro.color);
+          highestPrice = Math.max(highestPrice, pro.price);
+          lowestPrice = Math.min(lowestPrice, pro.price);
+        }
+        filterdata = {
+          brands: Array.from(brands),
+          subcategories: Array.from(subcategories),
+          colors: Array.from(colors),
+          highestPrice,
+          lowestPrice,
+        };
         break;
 
       default:
@@ -266,7 +287,11 @@ const getCategoryProducts = async (req, res) => {
     }
     res
       .status(200)
-      .json({ product: product, msg: "Products found successfully..." });
+      .json({
+        product: product,
+        filterdata,
+        msg: "Products found successfully...",
+      });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
