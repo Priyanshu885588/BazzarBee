@@ -28,14 +28,34 @@ export const SingleProduct = () => {
       const data = await getSingleProduct(id);
       const starCount = Math.floor(data.product[0].averageRating);
       data.product[0]["starCount"] = starCount;
+      let ratingSum = 0;
+      data.product[0].ratings.map((rating) => {
+        ratingSum += rating;
+      });
+      let indiperc = [];
+      data.product[0].ratings.map((rating, index) => {
+        let p = Math.floor((rating / ratingSum) * 100).toString() + "%";
+
+        indiperc.push(p);
+      });
+      data.product[0]["ratingRate"] = indiperc;
+
       setProductData(data.product[0]);
-      const sug1data = await getMensFilteredData(`subCategory=Shoes,Belts`);
-      console.log(sug1data);
-      setSuggestionProductsData1(sug1data.products);
+      if (
+        data.product[0].subCategory == "Shoes" ||
+        data.product[0].subCategory == "Belts"
+      ) {
+        const sug1data = await getMensFilteredData(`subCategory=Shirts,Pants`);
+        console.log(sug1data);
+        setSuggestionProductsData(sug1data.products);
+      } else {
+        const sug1data = await getMensFilteredData(`subCategory=Shoes,Belts`);
+        setSuggestionProductsData(sug1data.products);
+      }
       const sugdata = await getMensFilteredData(
         `subCategory=${data.product[0].subCategory}`
       );
-      setSuggestionProductsData(sugdata.products);
+      setSuggestionProductsData1(sugdata.products);
     } catch (error) {
       console.log(error.response);
       setisError(true);
@@ -62,7 +82,7 @@ export const SingleProduct = () => {
 
   if (isloading) {
     return (
-      <div className="flex w-full h-[50vh] justify-center items-center">
+      <div className="flex w-full h-[90vh] justify-center items-center">
         <TbCube3dSphere className="h-6 w-6 animate-spin" />
       </div>
     );
@@ -100,7 +120,7 @@ export const SingleProduct = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-2 border-b w-1/2 pb-2">
-                <h1 className="text-3xl font-extrabold roboto">
+                <h1 className="text-3xl font-extrabold roboto relative">
                   &#8377;{productData.price}
                 </h1>
                 <p className="font-semibold text-xs text-orange-400">
@@ -110,12 +130,7 @@ export const SingleProduct = () => {
               <div className="flex flex-col gap-3">
                 <div className="flex gap-2">
                   <span className="font-semibold">Color</span> -{" "}
-                  <span
-                    className=""
-                    style={{ color: productData.color.split(" ")[1] }}
-                  >
-                    {productData.color.split(" ")[0]}
-                  </span>
+                  <span className="">{productData.color.split(" ")[0]}</span>
                   <div
                     className="w-6 h-6 rounded-full border-2"
                     style={{ backgroundColor: productData.color.split(" ")[1] }}
@@ -197,20 +212,26 @@ export const SingleProduct = () => {
                   </p>
                 </div>
                 <div className="flex pt-4 border-t border-black h-fit flex-col">
-                  {productData.ratings.map((data, index) => (
-                    <div
-                      className="flex gap-2 items-center justify-center text-gray-400"
-                      key={index}
-                    >
-                      {5 - index}
-                      <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        <div
-                          className={`bg-yellow-400 h-2.5 rounded-full w-[10%]`}
-                        ></div>
+                  {productData.ratings
+                    .slice()
+                    .reverse()
+                    .map((data, index) => (
+                      <div
+                        className="flex gap-2 items-center justify-center text-gray-400 w-full"
+                        key={index}
+                      >
+                        <span className="w-fit">{5 - index}</span>
+                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                          <div
+                            className={`bg-yellow-500 h-2.5 rounded-full animate-pulse`}
+                            style={{
+                              width: `${productData.ratingRate[4 - index]}`,
+                            }}
+                          ></div>
+                        </div>
+                        <span className="w-fit">{data}</span>
                       </div>
-                      {data}
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
               <div className="flex justify-center items-center h-1/2 bg-slate-200 m-4 opacity-50">
