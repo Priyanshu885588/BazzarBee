@@ -3,75 +3,115 @@ import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { CiLocationArrow1 } from "react-icons/ci";
-
-import { GiExitDoor } from "react-icons/gi";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addToCart,
+  decrementQuantity,
+  removeFromCart,
+} from "../slices/cartSlice";
+import { clearCart } from "../slices/cartSlice";
+import { Link } from "react-router-dom";
+import { IoTrashBinOutline } from "react-icons/io5";
 export const Cart = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const totalPrice = useSelector((state) => state.cart.totalPrice);
+
+  console.log(cartItems);
+  const handleAddToCart = (productData) => {
+    dispatch(addToCart(productData));
+  };
+  const handleClearCart = () => {
+    dispatch(clearCart());
+  };
+  const handleRemoveCart = (item) => {
+    dispatch(removeFromCart(item));
+  };
+  const handleDecQua = (item) => {
+    dispatch(decrementQuantity(item));
+  };
   return (
     <div className="h-screen w-[100vw] absolute right-0 z-[9999] bg-white">
-      <section className="bg-white py-8 antialiased">
+      <section className="bg-white antialiased montserrat">
         <div className="mx-auto px-4 2xl:px-0">
-          <div className="text-xl font-semibold text-gray-900  sm:text-2xl flex w-full justify-between items-center px-5">
-            <h1>Shopping Cart</h1>
-            <GiExitDoor className="w-10 h-10 cursor-pointer" />
+          <div className="text-xl font-semibold text-gray-900  sm:text-2xl text-center w-full  px-5">
+            Shopping Cart
           </div>
-
+          {cartItems.length > 0 && (
+            <div
+              className="font-medium flex gap-1 items-center cursor-pointer"
+              onClick={handleClearCart}
+            >
+              Clear
+              <IoTrashBinOutline />
+            </div>
+          )}
           <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
             <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
               <div className="space-y-6">
-                {cartItems ? (
+                {cartItems.length > 0 ? (
                   cartItems.map((item, index) => (
-                    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
+                    <div
+                      className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6"
+                      key={index}
+                    >
                       <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-                        <img className="h-20 w-20 dark:hidden" src="" alt="" />
+                        <img
+                          className="h-32 w-24 rounded-lg"
+                          src={item.imageUrl}
+                          alt=""
+                        />
 
-                        <label for="counter-input" className="sr-only">
-                          Choose quantity:
-                        </label>
                         <div className="flex items-center justify-between md:order-3 md:justify-end">
-                          <div className="flex items-center">
-                            <button
-                              type="button"
-                              id="decrement-button"
-                              data-input-counter-decrement="counter-input"
-                              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 "
-                            >
-                              <FaPlus className="text-gray-600 text-sm" />
-                            </button>
-                            <input
-                              type="text"
-                              id="counter-input"
-                              data-input-counter
-                              className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 "
-                              placeholder=""
-                              value="2"
-                              required
-                            />
-                            <button
-                              type="button"
-                              id="increment-button"
-                              data-input-counter-increment="counter-input"
-                              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 "
-                            >
-                              <FaMinus className="text-gray-600 text-sm" />
-                            </button>
+                          <div className="flex flex-col gap-4 items-center w-full h-full">
+                            <div className="flex items-center">
+                              <button
+                                type="button"
+                                id="decrement-button"
+                                data-input-counter-decrement="counter-input"
+                                onClick={() => handleDecQua(item)}
+                                className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 "
+                              >
+                                <FaMinus className="text-gray-600 text-sm" />
+                              </button>
+                              <p className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 ">
+                                {item.quantity}
+                              </p>
+                              <button
+                                type="button"
+                                id="increment-button"
+                                data-input-counter-increment="counter-input"
+                                onClick={() => handleAddToCart(item)}
+                                className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 "
+                              >
+                                <FaPlus className="text-gray-600 text-sm" />
+                              </button>
+                            </div>
+                            <h4>&#8377;{item.price}</h4>
                           </div>
+
                           <div className="text-end md:order-4 md:w-32">
-                            <p className="text-base font-bold text-gray-900 ">
-                              $1,499
-                            </p>
+                            <p className="text-base font-bold text-gray-900 "></p>
                           </div>
                         </div>
 
                         <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                          <a
-                            href="#"
-                            className="text-base font-medium text-gray-900 hover:opacity-75 "
+                          <Link
+                            to={`/categories/men/singleProduct?id=${item._id}`}
+                            className="font-bold"
                           >
-                            PC system All in One APPLE iMac (2023) mqrq3ro/a,
-                            Apple M3, 24" Retina 4.5K, 8GB, SSD 256GB, 10-core
-                            GPU, Keyboard layout INT
-                          </a>
-
+                            {item.brandName}
+                            <br />
+                          </Link>
+                          <Link
+                            to={`/categories/men/singleProduct?id=${item._id}`}
+                            className="text-base  text-gray-900 hover:opacity-75 border-b border-black"
+                          >
+                            {item.name}
+                          </Link>
+                          <p className="text-sm opacity-65">
+                            {item.description}
+                          </p>
                           <div className="flex items-center gap-4">
                             <button
                               type="button"
@@ -84,6 +124,7 @@ export const Cart = () => {
                             <button
                               type="button"
                               className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
+                              onClick={() => handleRemoveCart(item)}
                             >
                               Remove
                             </button>
@@ -93,7 +134,12 @@ export const Cart = () => {
                     </div>
                   ))
                 ) : (
-                  <p>No items</p>
+                  <div className=" w-full h-full relative -left-28">
+                    <iframe
+                      src="https://giphy.com/embed/yo6XX1ckyN3uPJynZj"
+                      className="h-[50vh]"
+                    ></iframe>
+                  </div>
                 )}
               </div>
             </div>
@@ -111,7 +157,7 @@ export const Cart = () => {
                         Original price
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $7,592.00
+                        &#8377;{parseFloat(totalPrice.toFixed(2)) + 400}
                       </dd>
                     </dl>
 
@@ -120,7 +166,7 @@ export const Cart = () => {
                         Savings
                       </dt>
                       <dd className="text-base font-medium text-green-600">
-                        -$299.00
+                        &#8377;-400.00
                       </dd>
                     </dl>
 
@@ -129,7 +175,7 @@ export const Cart = () => {
                         Store Pickup
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $99
+                        &#8377;+99
                       </dd>
                     </dl>
 
@@ -138,7 +184,7 @@ export const Cart = () => {
                         Tax
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $799
+                        &#8377;+99
                       </dd>
                     </dl>
                   </div>
@@ -148,7 +194,7 @@ export const Cart = () => {
                       Total
                     </dt>
                     <dd className="text-base font-bold text-gray-900 dark:text-white">
-                      $8,191.00
+                      &#8377;{parseFloat(totalPrice.toFixed(2)) + 99 + 99}
                     </dd>
                   </dl>
                 </div>
@@ -165,14 +211,13 @@ export const Cart = () => {
                     {" "}
                     or{" "}
                   </span>
-                  <a
-                    href="#"
-                    title=""
+                  <Link
+                    to="/"
                     className="inline-flex items-center gap-1 justify-center text-sm font-medium text-primary-700 hover:underline dark:text-white"
                   >
                     Continue Shopping
                     <CiLocationArrow1 className="text-base" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

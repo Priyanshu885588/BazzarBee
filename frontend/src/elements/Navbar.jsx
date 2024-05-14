@@ -90,9 +90,12 @@ export const Navbar = ({ prop }) => {
         </div>
       </div>
       <div className="h-full w-1/4 rounded-r-full pr-8 flex justify-end items-center gap-5">
-        <div className="h-10 w-10 p-2 bg-white rounded-full cursor-pointer hover:bg-amber-500 transition-all duration-150">
+        <Link
+          className="h-10 w-10 p-2 bg-white rounded-full cursor-pointer hover:bg-amber-500 transition-all duration-150"
+          to="/cart"
+        >
           <MdOutlineShoppingCart size="25px" />
-        </div>
+        </Link>
         <div
           className="h-10 w-36 bg-white rounded-full px-3 flex justify-between items-center cursor-pointer"
           onClick={() => setDropDown((prev) => !prev)}

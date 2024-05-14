@@ -8,6 +8,8 @@ import { BsBagHeart } from "react-icons/bs";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import { SmallCards } from "../../UI/SmallCards";
 import { Cards } from "../../UI/Cards";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../slices/cartSlice";
 export const SingleProduct = () => {
   const [searchParams] = useSearchParams();
   const [productData, setProductData] = useState();
@@ -16,7 +18,11 @@ export const SingleProduct = () => {
   const [isloading, setisLoading] = useState(false);
   const [isError, setisError] = useState(false);
   const id = searchParams.get("id");
+  const dispatch = useDispatch();
 
+  const handleAddToCart = () => {
+    dispatch(addToCart(productData));
+  };
   const singleFetch = async (id) => {
     window.scrollTo({
       top: 0,
@@ -159,7 +165,10 @@ export const SingleProduct = () => {
             </div>
             <div className="h-full w-1/3">
               <div className="h-1/3 w-full flex flex-col gap-3">
-                <button className="bg-black text-white flex rounded-full py-2 pr-8 pl-10 items-center gap-2 relative -left-4 shadow-inner w-fit hover:bg-white hover:text-black overflow-hidden comeback-btn">
+                <button
+                  className="bg-black text-white flex rounded-full py-2 pr-8 pl-10 items-center gap-2 relative -left-4 shadow-inner w-fit hover:bg-white hover:text-black overflow-hidden comeback-btn"
+                  onClick={handleAddToCart}
+                >
                   <BsBagHeart />
                   Add to cart
                 </button>
