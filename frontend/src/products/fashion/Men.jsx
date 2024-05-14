@@ -35,10 +35,6 @@ export const Men = () => {
   };
 
   const sendQuery = (selectedFilters) => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
     const query = new URLSearchParams({
       subCategory: selectedFilters.subCategory.join(","),
       brands: selectedFilters.brands.join(","),
@@ -49,6 +45,10 @@ export const Men = () => {
   };
   useEffect(() => {
     const fetchFilterData = async () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
       try {
         setisLoading(true);
         const data = await getmensFilterData();

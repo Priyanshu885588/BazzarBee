@@ -26,6 +26,7 @@ export const DynamicSelectedCategory = () => {
 
   const handleCheckboxChange = (event, type, value) => {
     const isChecked = event.target.checked;
+    console.log(selectedFilters);
     const updatedSelectedFilters = { ...selectedFilters }; // Create a copy
 
     if (isChecked) {
@@ -85,7 +86,6 @@ export const DynamicSelectedCategory = () => {
       }
     };
     fetchFilterData();
-    updatedSelectedFilters["subCategory"] = [capitalizedSubCategory];
     setSelectedFilters(updatedSelectedFilters);
   }, [subCategory, searchParams]);
 
@@ -102,10 +102,9 @@ export const DynamicSelectedCategory = () => {
           capitalizedSubCategory
         );
         setFilterData(data.filterdata);
+
         const sum = (data.highestPrice - data.lowestPrice) / 4;
-        if (selectedFilters.subCategory.length > 0) {
-          sendQuery(selectedFilters);
-        }
+
         const newPriceRange = [];
         newPriceRange.push(data.lowestPrice);
         for (let i = 1; i <= 3; i++) {
