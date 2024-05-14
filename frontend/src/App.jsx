@@ -4,7 +4,6 @@ import { Home } from "./Home/Home";
 import { Footer } from "./elements/Footer";
 import { Login } from "./userAuth/login";
 import { SignUp } from "./userAuth/signUp";
-
 import "./App.css";
 import { ProductsMain } from "./products/ProductsMain";
 

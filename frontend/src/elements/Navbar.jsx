@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { getUserInfo } from "../userAuth/api";
 import { CategoriesDropdown } from "./CategoriesDropdown";
+import { useDispatch } from "react-redux";
 export const Navbar = ({ prop }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);

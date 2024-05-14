@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
-import { FashionProducts } from "./FashionProducts";
+import { FashionProducts } from "./FashionProductsMen";
 import { getmensFilterData } from "../services/api";
 import { GiJumpingRope } from "react-icons/gi";
 import { FilterUI } from "../../UI/FilterUI";

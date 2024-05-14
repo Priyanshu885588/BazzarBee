@@ -8,7 +8,6 @@ import { BsBagHeart } from "react-icons/bs";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import { SmallCards } from "../../UI/SmallCards";
 import { Cards } from "../../UI/Cards";
-
 export const SingleProduct = () => {
   const [searchParams] = useSearchParams();
   const [productData, setProductData] = useState();
