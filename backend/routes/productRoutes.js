@@ -13,6 +13,7 @@ const {
   getSingleProduct,
   getCategoryProducts,
   catgoriesData,
+  cart
 } = require("../controller/productController");
 
 router.route("/beauty").get(getBeautyProducts);
@@ -27,5 +28,6 @@ router.route("/fashion/filter").get(filterProducts);
 router.route("/single-product").get(getSingleProduct);
 router.route("/category-products").get(getCategoryProducts);
 router.route("/category-data").get(catgoriesData);
+router.route("/cart").post(cart);
 
 module.exports = router;
