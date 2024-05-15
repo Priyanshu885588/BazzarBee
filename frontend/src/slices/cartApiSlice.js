@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios"; // Import axios
-const API_URL = "https://bazzar-bee-rzpp.vercel.app/api/v1/orders";
+const API_URL = "http://localhost:3000/api/v1/orders";
 export const fetchCartData = createAsyncThunk(
   "cart/fetchCartData",
   async () => {
@@ -32,20 +32,32 @@ export const addItemToCart = createAsyncThunk(
 
 export const DecItemFromCart = createAsyncThunk(
   "cart/DecItemFromCart",
-  async (itemId) => {
+  async (item) => {
     const token = localStorage.getItem("BazzarBeeToken");
     const config = {
       headers: {
         authorization: `Bearer ${token}`,
       },
     };
-    await axios.delete(
-      `${API_URL}/removeProduct?productId=${itemId}&quantity=1`,
+    console.log(item);
+    const response = await axios.delete(
+      `${API_URL}/removeProduct?productId=${item.id}&quantity=${item.quantity}`,
       config
     ); // Use axios.delete instead of api.delete
-    return itemId;
+    return response.data;
   }
 );
+
+export const clearCart = createAsyncThunk("cart/clearCart", async (itemId) => {
+  const token = localStorage.getItem("BazzarBeeToken");
+  const config = {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.delete(`${API_URL}/clearCart`, config); // Use axios.delete instead of api.delete
+  return response.data;
+});
 
 const initialState = {
   cartItems: [],
@@ -59,7 +71,7 @@ const initialState = {
 export const cartApiSlice = createSlice({
   name: "cartApi",
   initialState,
-  Reducers: {
+  reducers: {
     [fetchCartData.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
@@ -101,6 +113,14 @@ export const cartApiSlice = createSlice({
         state.totalQuantity -= quantity;
         state.totalPrice -= price * quantity;
       }
+    },
+    [clearCart.fulfilled]: (state, action) => {
+      state.cartItems = [];
+      (state.totalQuantity = 0),
+        (state.totalPrice = 0),
+        (state.cartVisible = false),
+        (state.isLoading = false),
+        (state.error = null);
     },
   },
 });

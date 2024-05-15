@@ -9,6 +9,7 @@ import {
   addItemToCart,
   fetchCartData,
   DecItemFromCart,
+  clearCart,
 } from "../slices/cartApiSlice";
 import { TbCube3dSphere } from "react-icons/tb";
 
@@ -17,7 +18,6 @@ import {
   decrementQuantity,
   removeFromCart,
 } from "../slices/cartSlice";
-import { clearCart } from "../slices/cartSlice";
 import { Link } from "react-router-dom";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { useState, useEffect } from "react";
@@ -25,7 +25,7 @@ export const Cart = () => {
   const dispatch = useDispatch();
   const [Loading, setisLoading] = useState(false);
 
-  const [totalPrice, setTotalPrice] = useState();
+  const [totalPrice, setTotalPrice] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const handleAddToCart = async (data) => {
     try {
@@ -62,16 +62,19 @@ export const Cart = () => {
     setisLoading(true);
     dispatch(fetchCartData())
       .then((response) => {
-        setCartItems(response.payload.cartItems);
-        let total1 = 0;
-        response.payload.cartItems.map((item) => {
-          total1 = item.total + total1;
-        });
-        console.log(total1);
-        setTotalPrice(total1);
+        if (response.payload.cartItems) {
+          setCartItems(response.payload.cartItems);
+          let total1 = 0;
+          response.payload.cartItems.map((item) => {
+            total1 = item.total + total1;
+          });
+          console.log(total1);
+          setTotalPrice(total1);
+        }
       })
       .catch((error) => {
         console.error("Cart items not available", error);
+        setCartItems([]);
       })
       .finally(() => {
         setisLoading(false);
@@ -81,16 +84,37 @@ export const Cart = () => {
     fetchCartItems();
   }, []);
 
-  const handleClearCart = () => {
-    dispatch(clearCart());
+  const handleClearCart = async (item) => {
+    setisLoading(true);
+    dispatch(clearCart())
+      .then((response) => {
+        setCartItems([]);
+
+        console.log(response);
+        setTotalPrice(0);
+      })
+      .catch((error) => {
+        console.error("Cart items not available", error);
+      })
+      .finally(() => {
+        setisLoading(false);
+      });
   };
   const handleRemoveCart = (item) => {
-    dispatch(removeFromCart(item));
+    setisLoading(true);
+    dispatch(DecItemFromCart({ id: item.productId, quantity: item.quantity }))
+      .then((response) => {
+        fetchCartItems();
+      })
+      .catch((error) => {
+        console.error("Cart items not available", error);
+      });
+    dispatch(decrementQuantity(item));
   };
   const handleDecQua = async (item) => {
     setisLoading(true);
     console.log(item.productId);
-    dispatch(DecItemFromCart(item.productId))
+    dispatch(DecItemFromCart({ id: item.productId, quantity: 1 }))
       .then((response) => {
         fetchCartItems();
       })
@@ -108,7 +132,7 @@ export const Cart = () => {
           </div>
           {!Loading ? (
             <>
-              {cartItems.length > 0 && (
+              {cartItems && (
                 <div
                   className="font-medium flex gap-1 items-center cursor-pointer"
                   onClick={handleClearCart}

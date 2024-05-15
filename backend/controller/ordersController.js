@@ -119,7 +119,7 @@ const removeCart = async (req, res) => {
     // Update cart with new values
     userCart.subTotal = subTotal;
     userCart.total = total;
-
+    userCart.items.total = total;
     // Save the updated cart
     await userCart.save();
 
@@ -143,9 +143,10 @@ const getAllCartProducts = async (req, res) => {
       return res.status(200).json({ msg: "no products found" });
     }
     const { items } = userCart[0];
-    res
-      .status(200)
-      .json({ cartItems: items, msg: "Products found successfully" });
+    res.status(200).json({
+      cartItems: items,
+      msg: "Products found successfully",
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

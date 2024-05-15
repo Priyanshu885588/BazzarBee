@@ -23,6 +23,7 @@ export const SingleProduct = () => {
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
+    toast.loading("Loading");
     dispatch(
       addItemToCart({
         items: [
@@ -41,14 +42,16 @@ export const SingleProduct = () => {
     )
       .then((response) => {
         console.log("Item added to cart:", response);
-        notify();
+        toast.dismiss();
+        toast.success("Great choice!");
       })
       .catch((error) => {
         console.error("Failed to add item to cart:", error);
+        toast.dismiss();
+        toast.error("Failed to add item to cart:");
       });
     dispatch(addToCart(productData));
   };
-  const notify = () => toast.success("Great choice!");
   const singleFetch = async (id) => {
     window.scrollTo({
       top: 0,
