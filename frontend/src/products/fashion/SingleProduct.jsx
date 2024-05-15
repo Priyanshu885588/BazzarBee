@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TbCube3dSphere } from "react-icons/tb";
-import { getMensFilteredData, getSingleProduct } from "../services/api";
+import { getFilteredData, getSingleProduct } from "../services/api";
 import { FaStar } from "react-icons/fa";
 import { useState } from "react";
 import { BsBagHeart } from "react-icons/bs";
@@ -10,6 +10,8 @@ import { SmallCards } from "../../UI/SmallCards";
 import { Cards } from "../../UI/Cards";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../slices/cartSlice";
+import { addItemToCart } from "../../slices/cartApiSlice";
+import toast, { Toaster } from "react-hot-toast";
 export const SingleProduct = () => {
   const [searchParams] = useSearchParams();
   const [productData, setProductData] = useState();
@@ -21,8 +23,32 @@ export const SingleProduct = () => {
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
+    dispatch(
+      addItemToCart({
+        items: [
+          {
+            productId: productData._id,
+            name: productData.name,
+            description: productData.description,
+            quantity: 1,
+            price: productData.price,
+            total: productData.price,
+            attributes: { size: "S", color: productData.color },
+            image: productData.imageUrl,
+          },
+        ],
+      })
+    )
+      .then((response) => {
+        console.log("Item added to cart:", response);
+        notify();
+      })
+      .catch((error) => {
+        console.error("Failed to add item to cart:", error);
+      });
     dispatch(addToCart(productData));
   };
+  const notify = () => toast.success("Great choice!");
   const singleFetch = async (id) => {
     window.scrollTo({
       top: 0,
@@ -50,14 +76,14 @@ export const SingleProduct = () => {
         data.product[0].subCategory == "Shoes" ||
         data.product[0].subCategory == "Belts"
       ) {
-        const sug1data = await getMensFilteredData(`subCategory=Shirts,Pants`);
+        const sug1data = await getFilteredData(`subCategory=Shirts,Pants`);
         console.log(sug1data);
         setSuggestionProductsData(sug1data.products);
       } else {
-        const sug1data = await getMensFilteredData(`subCategory=Shoes,Belts`);
+        const sug1data = await getFilteredData(`subCategory=Shoes,Belts`);
         setSuggestionProductsData(sug1data.products);
       }
-      const sugdata = await getMensFilteredData(
+      const sugdata = await getFilteredData(
         `subCategory=${data.product[0].subCategory}`
       );
       setSuggestionProductsData1(sugdata.products);
@@ -95,6 +121,16 @@ export const SingleProduct = () => {
 
   return (
     <div className="min-h-screen w-screen px-6">
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            padding: "16px",
+            color: "#ffffff",
+            backgroundColor: "#000000",
+          },
+        }}
+      />
       {productData && (
         <>
           <div className="flex w-full h-[70vh] justify-center">

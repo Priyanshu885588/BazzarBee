@@ -2,7 +2,7 @@ import React from "react";
 import { Cards } from "../../UI/Cards";
 import { useEffect, useState } from "react";
 import { TbCube3dSphere } from "react-icons/tb";
-import { getAllmensProducts, getMensFilteredData } from "../services/api";
+import { getAllmensProducts, getFilteredData } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 export const FashionProducts = ({ queryString }) => {
@@ -19,7 +19,7 @@ export const FashionProducts = ({ queryString }) => {
       try {
         setisLoading(true);
         if (queryString) {
-          const data = await getMensFilteredData(queryString);
+          const data = await getFilteredData(queryString);
           setProductsData(data.products);
         } else {
           const data = await getAllmensProducts();

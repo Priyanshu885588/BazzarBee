@@ -25,12 +25,13 @@ const addToCart = async (req, res) => {
       let total = subTotal + calculatedTax;
 
       // Update the cart object with subTotal and total
-      console.log(req.body);
       req.body.userId = userId;
       req.body.subTotal = subTotal;
       req.body.tax = calculatedTax;
       req.body.total = total;
+      console.log(req.body);
       const updatedUserCart = await Cart.create(req.body);
+
       return res.status(200).json({
         cart: updatedUserCart,
         msg: "product added to cart successfully",

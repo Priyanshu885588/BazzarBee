@@ -9,7 +9,7 @@ const getAllmensProducts = async () => {
     throw error;
   }
 };
-const getMensFilteredData = async (queryString) => {
+const getFilteredData = async (queryString) => {
   try {
     const response = await axios.get(
       `${API_URL}/fashion/filter?${queryString.toString()}`
@@ -61,7 +61,7 @@ const getParticulatCategoryProducts = async (category, subCategory) => {
 export {
   getAllmensProducts,
   getmensFilterData,
-  getMensFilteredData,
+  getFilteredData,
   getSingleProduct,
   getCategoryData,
   getParticulatCategoryProducts,

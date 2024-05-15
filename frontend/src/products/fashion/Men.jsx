@@ -11,6 +11,10 @@ export const Men = () => {
   const [priceRange, setPriceRange] = useState([]);
   const [queryString, setQueryString] = useState();
   const [isloading, setisLoading] = useState(false);
+  const [sortingDropdown, setSortingDropdown] = useState({
+    visibility: false,
+    valueOrder: "Sort by : Recommended",
+  });
   const [selectedFilters, setSelectedFilters] = useState({
     subCategory: [],
     brands: [],
@@ -18,6 +22,19 @@ export const Men = () => {
     price: [],
   });
   const [isError, setisError] = useState(false);
+
+  const handleSortVisibility = () => {
+    setSortingDropdown({
+      ...sortingDropdown,
+      visibility: !sortingDropdown.visibility,
+    });
+  };
+  const changeValueOrder = (newValueOrder) => {
+    setSortingDropdown({
+      visibility: false,
+      valueOrder: newValueOrder,
+    });
+  };
 
   const handleCheckboxChange = (event, type, value) => {
     const isChecked = event.target.checked;
@@ -124,9 +141,46 @@ export const Men = () => {
           <div className="border-b pt-4 pb-6 h-12 flex gap-1 items-center justify-between px-4">
             <div className="flex items-center capitalize gap-4"></div>
             <div className="mr-4">
-              <button className="py-2 px-4 border-2 flex items-center gap-8 font-normal">
-                Sort by : Recommended <IoIosArrowDown />
+              <button
+                className="py-2 px-4 border-2 flex items-center gap-8 font-normal"
+                onClick={handleSortVisibility}
+              >
+                {sortingDropdown.valueOrder}{" "}
+                {sortingDropdown.visibility ? (
+                  <IoIosArrowDown className="rotate-180" />
+                ) : (
+                  <IoIosArrowDown />
+                )}
               </button>
+              {sortingDropdown.visibility && (
+                <ul className="absolute bg-white border-x-2 border-b-2">
+                  <li
+                    className="py-2 px-4 flex items-center gap-8 hover:bg-orange-50 cursor-pointer
+                    font-normal"
+                    onClick={() => changeValueOrder("Sort by : Recommended")}
+                  >
+                    Sort by : Recommended
+                  </li>
+                  <li
+                    className="py-2 px-4 flex items-center gap-8 hover:bg-orange-50 cursor-pointer
+                    font-normal"
+                    onClick={() =>
+                      changeValueOrder("Sort by : Price High to low")
+                    }
+                  >
+                    Sort by : Price {"High to low"}
+                  </li>
+                  <li
+                    className="py-2 px-4 flex items-center gap-8 hover:bg-orange-50 cursor-pointer
+                    font-normal"
+                    onClick={() =>
+                      changeValueOrder("Sort by : Price Low to high")
+                    }
+                  >
+                    Sort by : Price {"Low to high"}
+                  </li>
+                </ul>
+              )}
             </div>
           </div>
           <FashionProducts queryString={queryString} />

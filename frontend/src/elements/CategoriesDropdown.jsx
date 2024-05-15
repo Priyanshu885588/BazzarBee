@@ -70,9 +70,12 @@ export const CategoriesDropdown = () => {
                 </li>
               ))}
             </ul>
-            <h6 className=" roboto text-orange-500 font-semibold text-left mt-2 mb-1 border-t pt-2">
+            <Link
+              className="roboto text-orange-500 font-semibold text-left pt-3 mb-1 hover:text-orange-700"
+              to="/categories/Women"
+            >
               Women's
-            </h6>
+            </Link>
             <ul className="text-left flex flex-col gap-1 ">
               {categoryData.subcategories[1].map((data, index) => (
                 <li
