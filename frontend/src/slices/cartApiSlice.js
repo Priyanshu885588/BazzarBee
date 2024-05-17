@@ -25,7 +25,6 @@ export const addItemToCart = createAsyncThunk(
       },
     };
     const response = await axios.post(`${API_URL}/addtocart`, item, config); // Use axios.post instead of api.post
-    console.log(response);
     return response.data;
   }
 );
@@ -39,7 +38,6 @@ export const DecItemFromCart = createAsyncThunk(
         authorization: `Bearer ${token}`,
       },
     };
-    console.log(item);
     const response = await axios.delete(
       `${API_URL}/removeProduct?productId=${item.id}&quantity=${item.quantity}`,
       config

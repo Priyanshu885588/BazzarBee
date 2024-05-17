@@ -43,7 +43,10 @@ export const Cart = () => {
               quantity: 1,
               price: productData.price,
               total: productData.price,
-              attributes: { size: "S", color: productData.color },
+              attributes: {
+                size: data.attributes.size,
+                color: productData.color,
+              },
               image: productData.imageUrl,
             },
           ],
@@ -63,13 +66,9 @@ export const Cart = () => {
     dispatch(fetchCartData())
       .then((response) => {
         if (response.payload.cartItems) {
+          console.log(response);
           setCartItems(response.payload.cartItems);
-          let total1 = 0;
-          response.payload.cartItems.map((item) => {
-            total1 = item.total + total1;
-          });
-          console.log(total1);
-          setTotalPrice(total1);
+          setTotalPrice(response.payload.total);
         }
       })
       .catch((error) => {
@@ -197,6 +196,7 @@ export const Cart = () => {
                               >
                                 {item.name}
                               </Link>
+                              <p>Size : {item.attributes.size}</p>
                               <p className="text-sm opacity-65">
                                 {item.description}
                               </p>

@@ -18,11 +18,16 @@ export const SingleProduct = () => {
   const [suggestionProductsData, setSuggestionProductsData] = useState([]);
   const [suggestionProductsData1, setSuggestionProductsData1] = useState([]);
   const [isloading, setisLoading] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(false);
+
   const [isError, setisError] = useState(false);
   const id = searchParams.get("id");
   const dispatch = useDispatch();
-
   const handleAddToCart = () => {
+    if (!selectedSize) {
+      toast.error("Please select the size");
+      return;
+    }
     toast.loading("Loading");
     dispatch(
       addItemToCart({
@@ -34,14 +39,13 @@ export const SingleProduct = () => {
             quantity: 1,
             price: productData.price,
             total: productData.price,
-            attributes: { size: "S", color: productData.color },
+            attributes: { size: selectedSize, color: productData.color },
             image: productData.imageUrl,
           },
         ],
       })
     )
       .then((response) => {
-        console.log("Item added to cart:", response);
         toast.dismiss();
         toast.success("Great choice!");
       })
@@ -191,8 +195,11 @@ export const SingleProduct = () => {
                   <div className="flex gap-2 flex-wrap">
                     {productData.quantityAvailable.sizes.map((size, index) => (
                       <button
-                        className="py-1 px-2 border-2 border-gray-300 rounded-t-lg hover:scale-110 w-12 text-sm"
+                        className={`py-1 px-2 border-2 border-gray-300 rounded-t-lg hover:scale-110 w-12 text-sm ${
+                          size === selectedSize ? "bg-black text-white" : ""
+                        }`}
                         key={index}
+                        onClick={() => setSelectedSize(size)}
                       >
                         {size}
                       </button>
