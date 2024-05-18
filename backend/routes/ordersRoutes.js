@@ -5,6 +5,7 @@ const {
   removeCart,
   getAllCartProducts,
   clearCart,
+  storeUserAddress,
 } = require("../controller/ordersController");
 const auth = require("../middleware/auth");
 
@@ -17,5 +18,7 @@ router.route("/clearCart").delete(auth.authenticationMiddleware, clearCart);
 router
   .route("/getcartproducts")
   .get(auth.authenticationMiddleware, getAllCartProducts);
+
+router.route("/address").post(auth.authenticationMiddleware,storeUserAddress);
 
 module.exports = router;
