@@ -19,6 +19,7 @@ export const Navbar = ({ prop }) => {
     setIsLogin(false);
     setDropDown(false);
   };
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { userlogin } from "./api";
 import { Link, useNavigate } from "react-router-dom";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
+import ImagePane from "../assets/plane.gif";
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -43,20 +44,25 @@ export const Login = () => {
   return (
     <>
       <div className="min-h-screen md:flex absolute top-0 w-full z-50">
-        <div className="relative overflow-hidden md:flex w-1/2  i justify-around items-center hidden bg-black">
-          <div className="flex flex-col justify-center items-center">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/bazzarbee-192fe.appspot.com/o/WhatsApp%20Image%202024-05-04%20at%2020.58.11_e2b2e14b.jpg?alt=media&token=24699d11-295c-4ef8-9e64-bb2f51adb127"
-              alt="logo"
-              className=" h-96"
-            />
-          </div>
-          <div className="absolute -bottom-32 -left-40 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-          <div className="absolute -bottom-40 -left-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-          <div className="absolute -top-40 -right-0 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-          <div className="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+        <div className="relative overflow-hidden md:flex w-1/2 i justify-around items-center hidden bg-black back-image-svg z-30">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/bazzarbee-192fe.appspot.com/o/HomePage%2Flogo_transparent.png?alt=media&token=468130ad-b207-47c0-9bb6-8831474ea819"
+            alt="logo"
+            className=" h-48"
+          />
         </div>
-        <div className="flex md:w-1/2 justify-center py-10 items-center flex-col bg-white">
+        <div className="flex md:w-1/2 justify-center py-10 items-center flex-col bg-white relative">
+          <div className="absolute w-screen h-20 bg-transparent top-5">
+            <div className="absolute flex items-center entry-ani-banner right-[20%]">
+              <div className="bg-gray-50 w-[fit] h-8 shadow-md rounded-md border z-20 border-black text-[13px] py-1 px-2 quicksand flex justify-center items-center">
+                Log in securely. We've got your privacy covered.
+              </div>
+              <img
+                src={ImagePane}
+                className="w-20 h-20 z-10 rotate-45 bg-blend-multiply"
+              ></img>
+            </div>
+          </div>
           <form className="bg-white" onSubmit={handleSubmit}>
             <h1 className="text-gray-800 font-bold text-2xl mb-1">
               Hello Again!

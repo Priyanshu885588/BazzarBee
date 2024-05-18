@@ -11,6 +11,7 @@ import { Cards } from "../../UI/Cards";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../slices/cartSlice";
 import { addItemToCart } from "../../slices/cartApiSlice";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 export const SingleProduct = () => {
   const [searchParams] = useSearchParams();
@@ -19,11 +20,15 @@ export const SingleProduct = () => {
   const [suggestionProductsData1, setSuggestionProductsData1] = useState([]);
   const [isloading, setisLoading] = useState(false);
   const [selectedSize, setSelectedSize] = useState(false);
-
+  const navigate = useNavigate();
   const [isError, setisError] = useState(false);
   const id = searchParams.get("id");
   const dispatch = useDispatch();
   const handleAddToCart = () => {
+    const token = localStorage.getItem("BazzarBeeToken");
+    if (!token) {
+      navigate("/userlogin");
+    }
     if (!selectedSize) {
       toast.error("Please select the size");
       return;

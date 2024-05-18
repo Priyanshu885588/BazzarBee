@@ -7,7 +7,7 @@ import { SignUp } from "./userAuth/signUp";
 import "./App.css";
 import { ProductsMain } from "./products/ProductsMain";
 import { Cart } from "./elements/Cart";
-
+import { PrivateRoute } from "./elements/PrivateRoute";
 function App() {
   return (
     <>
@@ -16,7 +16,9 @@ function App() {
         <Route path="/userlogin" element={<Login />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/categories/*" element={<ProductsMain />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="" element={<PrivateRoute />}>
+          <Route path="/cart" element={<Cart />} />
+        </Route>
       </Routes>
       <Footer />
     </>
