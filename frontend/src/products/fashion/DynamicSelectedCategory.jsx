@@ -185,6 +185,7 @@ export const DynamicSelectedCategory = () => {
           <FashionProducts
             queryString={queryString}
             fetchProducts={getAllmensProducts}
+            categ={selectedFilters.category[0]}
           />
         </div>
       </div>

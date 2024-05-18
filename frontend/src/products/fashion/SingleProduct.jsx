@@ -84,16 +84,44 @@ export const SingleProduct = () => {
       data.product[0]["ratingRate"] = indiperc;
 
       setProductData(data.product[0]);
-      if (
-        data.product[0].subCategory == "Shoes" ||
-        data.product[0].subCategory == "Belts"
-      ) {
-        const sug1data = await getFilteredData(`subCategory=Shirts,Pants`);
+      console.log(data.product[0].category.charAt(0));
+      if (data.product[0].category.charAt(1) == "M") {
+        if (
+          data.product[0].subCategory == "Shoes" ||
+          data.product[0].subCategory == "Belts"
+        ) {
+          const query = new URLSearchParams({
+            subCategory: "Shirts,Pants",
+            category: "Men's clothing",
+          });
+          const sug1data = await getFilteredData(query);
 
-        setSuggestionProductsData(sug1data.products);
+          setSuggestionProductsData(sug1data.products);
+        } else {
+          const query = new URLSearchParams({
+            subCategory: "Shoes,Belts",
+            category: "Men's Accessories",
+          });
+          const sug1data = await getFilteredData(query);
+          setSuggestionProductsData(sug1data.products);
+        }
       } else {
-        const sug1data = await getFilteredData(`subCategory=Shoes,Belts`);
-        setSuggestionProductsData(sug1data.products);
+        if (
+          data.product[0].subCategory == "Handbags" ||
+          data.product[0].subCategory == "Jewelry" ||
+          data.product[0].subCategory == "Footwear"
+        ) {
+          const sug1data = await getFilteredData(
+            `subCategory=Dresses,Tops&category=`
+          );
+          setSuggestionProductsData(sug1data.products);
+        } else {
+          const sug1data = await getFilteredData(
+            `subCategory=Handbags,Jewelry`
+          );
+          console.log(sug1data);
+          setSuggestionProductsData(sug1data.products);
+        }
       }
       const sugdata = await getFilteredData(
         `subCategory=${data.product[0].subCategory}`

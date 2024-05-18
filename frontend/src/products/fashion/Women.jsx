@@ -136,6 +136,7 @@ export const Women = () => {
           <FashionProducts
             queryString={queryString}
             fetchProducts={getAllWomensProducts}
+            cat={selectedFilters.category}
           />
         </div>
       </div>

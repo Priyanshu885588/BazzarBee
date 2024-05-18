@@ -5,13 +5,17 @@ import { TbCube3dSphere } from "react-icons/tb";
 import { getAllmensProducts, getFilteredData } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-export const FashionProducts = ({ queryString, fetchProducts }) => {
+export const FashionProducts = ({ queryString, fetchProducts, categ }) => {
   const [productsData, setProductsData] = useState([]);
   const [isloading, setisLoading] = useState(false);
   const [isError, setisError] = useState(false);
   const navigate = useNavigate();
   const handleChange = (id) => {
-    navigate(`/categories/men/singleProduct?id=${id}`);
+    if (categ[0].charAt(0) == "M") {
+      navigate(`/categories/men/singleProduct?id=${id}`);
+    } else if (categ[0].charAt(0) == "W") {
+      navigate(`/categories/Women/singleProduct?id=${id}`);
+    }
   };
 
   useEffect(() => {

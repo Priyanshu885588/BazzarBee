@@ -24,7 +24,7 @@ export const Men = () => {
     category: ["Men's Accessories", "Men's clothing"],
   });
   const [isError, setisError] = useState(false);
-
+  console.log(selectedFilters.category);
   const handleSortVisibility = () => {
     setSortingDropdown({
       ...sortingDropdown,
@@ -189,6 +189,7 @@ export const Men = () => {
           <FashionProducts
             queryString={queryString}
             fetchProducts={getAllmensProducts}
+            categ={selectedFilters.category[0]}
           />
         </div>
       </div>
