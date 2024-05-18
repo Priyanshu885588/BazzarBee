@@ -36,7 +36,7 @@ export const FilterUI = ({
           </div>
           <div className="border-b py-4">
             <span className="uppercase font-bold my-4">Brand</span>
-            <ul className="py-4">
+            <ul className="py-4 h-40 overflow-scroll">
               {filterData.brands.map((data, index) => (
                 <li className="flex gap-2" key={index}>
                   <input
@@ -83,7 +83,7 @@ export const FilterUI = ({
           </div>
           <div className="border-b py-4">
             <span className="uppercase font-bold my-4">Color</span>
-            <ul className="py-4">
+            <ul className="py-4 h-40 overflow-scroll">
               {filterData.colors.map((data, index) => (
                 <li className="flex gap-2 items-center" key={index}>
                   <input

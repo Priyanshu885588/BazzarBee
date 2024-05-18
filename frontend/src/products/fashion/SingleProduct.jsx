@@ -84,7 +84,6 @@ export const SingleProduct = () => {
       data.product[0]["ratingRate"] = indiperc;
 
       setProductData(data.product[0]);
-      console.log(data.product[0].category.charAt(0));
       if (data.product[0].category.charAt(1) == "M") {
         if (
           data.product[0].subCategory == "Shoes" ||
@@ -119,7 +118,6 @@ export const SingleProduct = () => {
           const sug1data = await getFilteredData(
             `subCategory=Handbags,Jewelry`
           );
-          console.log(sug1data);
           setSuggestionProductsData(sug1data.products);
         }
       }

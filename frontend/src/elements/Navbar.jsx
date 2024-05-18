@@ -69,7 +69,7 @@ export const Navbar = ({ prop }) => {
         {categoriesDropdown && (
           <>
             <div
-              className="w-[70vw] h-[80vh] bg-white absolute top-20 z-20 border-t-2"
+              className="w-[70vw] h-[60vh] bg-white absolute top-20 z-20 border-t-2"
               onMouseLeave={() => setCategoriesDropdown(false)}
             >
               <CategoriesDropdown />

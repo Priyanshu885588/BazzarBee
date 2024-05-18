@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 const user = require("./user");
 
-const OrderSchema = new mongoose.Schema({
+const CheckoutSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  userName:{
-    type:String,
-    required:true,
+  userName: {
+    type: String,
+    required: true,
   },
   items: [
     {
@@ -44,33 +44,33 @@ const OrderSchema = new mongoose.Schema({
           required: false,
         },
       },
-    }
+    },
   ],
-  Address:{
-    pinCode:{
-        type: String,
-        required:true,
+  Address: {
+    pinCode: {
+      type: String,
+      required: true,
     },
-    address:{
-        type:String,
-        required:true,
+    address: {
+      type: String,
+      required: true,
     },
-    Town:{
-        type:String,
-        required:true,
+    Town: {
+      type: String,
+      required: true,
     },
-    city:{
-        type:String,
-        required:true,
+    city: {
+      type: String,
+      required: true,
     },
-    state:{
-        type:String,
-        required:true,
-    }
+    state: {
+      type: String,
+      required: true,
+    },
   },
-  typeOfAddress:{
-    type:String,
-    required:true,
+  typeOfAddress: {
+    type: String,
+    required: true,
   },
   subTotal: {
     type: Number,
@@ -83,7 +83,7 @@ const OrderSchema = new mongoose.Schema({
   total: {
     type: Number,
     default: 0,
-  }
+  },
 });
 
-module.exports = mongoose.model("Order", OrderSchema);
+module.exports = mongoose.model("Checkout", CheckoutSchema);
