@@ -66,7 +66,6 @@ export const Cart = () => {
     dispatch(fetchCartData())
       .then((response) => {
         if (response.payload.cartItems) {
-          console.log(response);
           setCartItems(response.payload.cartItems);
           setTotalPrice(response.payload.total);
         }
@@ -88,8 +87,6 @@ export const Cart = () => {
     dispatch(clearCart())
       .then((response) => {
         setCartItems([]);
-
-        console.log(response);
         setTotalPrice(0);
       })
       .catch((error) => {
@@ -112,7 +109,6 @@ export const Cart = () => {
   };
   const handleDecQua = async (item) => {
     setisLoading(true);
-    console.log(item.productId);
     dispatch(DecItemFromCart({ id: item.productId, quantity: 1 }))
       .then((response) => {
         fetchCartItems();

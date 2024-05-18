@@ -84,7 +84,7 @@ export const SingleProduct = () => {
         data.product[0].subCategory == "Belts"
       ) {
         const sug1data = await getFilteredData(`subCategory=Shirts,Pants`);
-        console.log(sug1data);
+
         setSuggestionProductsData(sug1data.products);
       } else {
         const sug1data = await getFilteredData(`subCategory=Shoes,Belts`);
@@ -95,7 +95,6 @@ export const SingleProduct = () => {
       );
       setSuggestionProductsData1(sugdata.products);
     } catch (error) {
-      console.log(error.response);
       setisError(true);
     } finally {
       setisLoading(false);
@@ -193,17 +192,27 @@ export const SingleProduct = () => {
                   </div>
 
                   <div className="flex gap-2 flex-wrap">
-                    {productData.quantityAvailable.sizes.map((size, index) => (
-                      <button
-                        className={`py-1 px-2 border-2 border-gray-300 rounded-t-lg hover:scale-110 w-12 text-sm ${
-                          size === selectedSize ? "bg-black text-white" : ""
-                        }`}
-                        key={index}
-                        onClick={() => setSelectedSize(size)}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                    {productData.quantityAvailable.sizes.map((size, index) =>
+                      productData.quantityAvailable.quantities[index] > 0 ? (
+                        <button
+                          className={`py-1 px-2 border-2 border-gray-300 rounded-t-lg hover:scale-110 w-12 text-sm ${
+                            size === selectedSize ? "bg-black text-white" : ""
+                          }`}
+                          key={index}
+                          onClick={() => setSelectedSize(size)}
+                        >
+                          {size}
+                        </button>
+                      ) : (
+                        <button
+                          className={`py-0.5 px-1 w-8 text-xs line-through`}
+                          disabled
+                          key={index}
+                        >
+                          {size}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
