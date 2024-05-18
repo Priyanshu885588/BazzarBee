@@ -9,6 +9,16 @@ const getAllmensProducts = async () => {
     throw error;
   }
 };
+
+const getAllWomensProducts = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/fashion/women`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getFilteredData = async (queryString) => {
   try {
     const response = await axios.get(
@@ -23,6 +33,15 @@ const getFilteredData = async (queryString) => {
 const getmensFilterData = async () => {
   try {
     const response = await axios.get(`${API_URL}/fashion/men/filterdata`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getWomensFilterData = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/fashion/Women/filterdata`);
     return response.data;
   } catch (error) {
     throw error;
@@ -65,4 +84,6 @@ export {
   getSingleProduct,
   getCategoryData,
   getParticulatCategoryProducts,
+  getWomensFilterData,
+  getAllWomensProducts,
 };

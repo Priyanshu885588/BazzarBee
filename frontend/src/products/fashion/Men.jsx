@@ -5,6 +5,7 @@ import { FashionProducts } from "./FashionProductsMen";
 import { getmensFilterData } from "../services/api";
 import { GiJumpingRope } from "react-icons/gi";
 import { FilterUI } from "../../UI/FilterUI";
+import { getAllmensProducts } from "../services/api";
 
 export const Men = () => {
   const [filterData, setFilterData] = useState();
@@ -20,6 +21,7 @@ export const Men = () => {
     brands: [],
     colors: [],
     price: [],
+    category: ["Men's Accessories", "Men's clothing"],
   });
   const [isError, setisError] = useState(false);
 
@@ -57,6 +59,7 @@ export const Men = () => {
       brands: selectedFilters.brands.join(","),
       colors: selectedFilters.colors.join(","),
       priceRange: selectedFilters.price.join(","),
+      category: selectedFilters.category.join(","),
     });
     setQueryString(query);
   };
@@ -183,7 +186,10 @@ export const Men = () => {
               )}
             </div>
           </div>
-          <FashionProducts queryString={queryString} />
+          <FashionProducts
+            queryString={queryString}
+            fetchProducts={getAllmensProducts}
+          />
         </div>
       </div>
     </div>

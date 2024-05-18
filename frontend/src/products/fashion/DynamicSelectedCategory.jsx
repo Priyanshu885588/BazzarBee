@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { FashionProducts } from "./FashionProductsMen";
 import { getParticulatCategoryProducts } from "../services/api";
+import { getAllmensProducts } from "../services/api";
 import { GiJumpingRope } from "react-icons/gi";
 import { FilterUI } from "../../UI/FilterUI";
 export const DynamicSelectedCategory = () => {
@@ -21,6 +22,10 @@ export const DynamicSelectedCategory = () => {
     brands: [],
     colors: [],
     price: [],
+    category: [
+      `${capitalizedSubCategory.split("-")[0]}'s Accessories`,
+      `${capitalizedSubCategory.split("-")[0]}'s clothing`,
+    ],
   });
   const [isError, setisError] = useState(false);
 
@@ -46,6 +51,7 @@ export const DynamicSelectedCategory = () => {
       brands: selectedFilters.brands.join(","),
       colors: selectedFilters.colors.join(","),
       priceRange: selectedFilters.price.join(","),
+      category: selectedFilters.category.join(","),
     });
     setQueryString(query);
   };
@@ -176,7 +182,10 @@ export const DynamicSelectedCategory = () => {
               </button>
             </div>
           </div>
-          <FashionProducts queryString={queryString} />
+          <FashionProducts
+            queryString={queryString}
+            fetchProducts={getAllmensProducts}
+          />
         </div>
       </div>
     </div>

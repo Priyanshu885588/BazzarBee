@@ -5,7 +5,7 @@ import { TbCube3dSphere } from "react-icons/tb";
 import { getAllmensProducts, getFilteredData } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-export const FashionProducts = ({ queryString }) => {
+export const FashionProducts = ({ queryString, fetchProducts }) => {
   const [productsData, setProductsData] = useState([]);
   const [isloading, setisLoading] = useState(false);
   const [isError, setisError] = useState(false);
@@ -15,14 +15,14 @@ export const FashionProducts = ({ queryString }) => {
   };
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts1 = async () => {
       try {
         setisLoading(true);
         if (queryString) {
           const data = await getFilteredData(queryString);
           setProductsData(data.products);
         } else {
-          const data = await getAllmensProducts();
+          const data = await fetchProducts();
           setProductsData(data.products);
         }
       } catch (error) {
@@ -35,7 +35,7 @@ export const FashionProducts = ({ queryString }) => {
         }, 4000);
       }
     };
-    fetchProducts();
+    fetchProducts1();
   }, [queryString]);
 
   if (isError) {

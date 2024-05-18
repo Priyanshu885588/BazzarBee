@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { FashionProducts } from "./FashionProductsMen";
-import { getmensFilterData } from "../services/api";
+import { getWomensFilterData } from "../services/api";
+import { getAllWomensProducts } from "../services/api";
 import { GiJumpingRope } from "react-icons/gi";
 import { FilterUI } from "../../UI/FilterUI";
 
@@ -17,6 +18,7 @@ export const Women = () => {
     brands: [],
     colors: [],
     price: [],
+    category: ["Women's Accessories", "Women's clothing"],
   });
   const [isError, setisError] = useState(false);
 
@@ -41,6 +43,7 @@ export const Women = () => {
       brands: selectedFilters.brands.join(","),
       colors: selectedFilters.colors.join(","),
       priceRange: selectedFilters.price.join(","),
+      category: selectedFilters.category.join(","),
     });
     setQueryString(query);
   };
@@ -52,7 +55,7 @@ export const Women = () => {
       });
       try {
         setisLoading(true);
-        const data = await getmensFilterData();
+        const data = await getWomensFilterData();
         setFilterData(data);
         const sum = (data.highestPrice - data.lowestPrice) / 4;
         if (selectedFilters.subCategory.length > 0) {
@@ -130,7 +133,10 @@ export const Women = () => {
               </button>
             </div>
           </div>
-          <FashionProducts queryString={queryString} />
+          <FashionProducts
+            queryString={queryString}
+            fetchProducts={getAllWomensProducts}
+          />
         </div>
       </div>
     </div>

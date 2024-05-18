@@ -122,7 +122,7 @@ const getAllMensFashionProducts = async (req, res) => {
 const getAllWomensFashionProducts = async (req, res) => {
   try {
     const products = await FashionProduct.find({
-      category: { $in: ["Women's Accessories", "Women's Clothing"] },
+      category: { $in: ["Women's Accessories", "Women's clothing"] },
     });
     res.json({ products: products, msg: "successfull" });
   } catch (error) {
@@ -136,7 +136,7 @@ const catgoriesData = async (req, res) => {
       category: { $in: ["Men's Accessories", "Men's clothing"] },
     });
     const WomenClothing = await FashionProduct.find({
-      category: { $in: ["Women's Accessories", "Women's Clothing"] },
+      category: { $in: ["Women's Accessories", "Women's clothing"] },
     });
     const subcategories = [
       new Set(),
@@ -195,7 +195,7 @@ const filterDataMensClothing = async (req, res) => {
 const filterDataWoMensClothing = async (req, res) => {
   try {
     const WomenClothing = await FashionProduct.find({
-      category: { $in: ["Women's Accessories", "Women's Clothing"] },
+      category: { $in: ["Women's Accessories", "Women's clothing"] },
     });
     const brands = new Set(); // Use Set for unique values
     const subcategories = new Set();
@@ -230,9 +230,12 @@ const filterProducts = async (req, res) => {
   const brands = req.query.brands ? req.query.brands.split(",") : [];
   const colors = req.query.colors ? req.query.colors.split(",") : [];
   const priceRange = req.query.priceRange || "";
+  const category = req.query.category ? req.query.category.split(",") : [];
   try {
     const filter = {};
-    filter.category = { $in: ["Men's Accessories", "Men's clothing"] };
+    filter.category = {
+      $in: category,
+    };
     if (subCategory.length > 0) filter.subCategory = { $in: subCategory };
     if (brands.length > 0) filter.brandName = { $in: brands };
     if (colors.length > 0) {

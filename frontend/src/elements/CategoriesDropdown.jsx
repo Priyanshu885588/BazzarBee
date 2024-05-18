@@ -59,7 +59,7 @@ export const CategoriesDropdown = () => {
             >
               Men's
             </Link>
-            <ul className="text-left flex flex-col gap-1 ">
+            <ul className="text-left flex flex-col gap-1 h-1/3 flex-wrap">
               {categoryData.subcategories[0].map((data, index) => (
                 <li
                   className="hover:font-bold cursor-pointer"
@@ -76,12 +76,12 @@ export const CategoriesDropdown = () => {
             >
               Women's
             </Link>
-            <ul className="text-left flex flex-col gap-1 ">
+            <ul className="text-left flex flex-col gap-1 h-1/3 flex-wrap">
               {categoryData.subcategories[1].map((data, index) => (
                 <li
                   className="hover:font-bold cursor-pointer"
                   key={index}
-                  onClick={() => naivgatePages("men", data)}
+                  onClick={() => naivgatePages("Women", "fashion", data)}
                 >
                   {data}
                 </li>
