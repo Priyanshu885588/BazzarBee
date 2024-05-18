@@ -42,13 +42,22 @@ const addToCart = async (req, res) => {
       let existingSubTotal = existingCart.subTotal;
 
       // Add new items and update the subtotal
+      console.log(updatedItems);
       items.forEach((newItem) => {
-        const existingItemIndex = updatedItems.findIndex((item) =>
-          item.productId.equals(newItem.productId)
+        console.log(newItem.size);
+        const existingItemIndex = updatedItems.findIndex(
+          (item) =>
+            item.productId == newItem.productId &&
+            item.attributes.size == newItem.attributes.size
         );
-        if (existingItemIndex >= 0 && updatedItems[existingItemIndex].attributes.size === newItem.attributes.size) {
+        console.log(existingItemIndex);
+        if (
+          existingItemIndex >= 0 &&
+          updatedItems[existingItemIndex].attributes.size ==
+            newItem.attributes.size
+        ) {
           // If the item already exists in the cart, update the quantity and total
-
+          console.log(11);
           updatedItems[existingItemIndex].quantity += newItem.quantity;
           updatedItems[existingItemIndex].total +=
             newItem.quantity * newItem.price;
@@ -123,9 +132,10 @@ const removeCart = async (req, res) => {
     // Save the updated cart
     await userCart.save();
 
-    return res
-      .status(200)
-      .json({ msg: "Product removed from cart successfully",userCart:userCart });
+    return res.status(200).json({
+      msg: "Product removed from cart successfully",
+      userCart: userCart,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -142,11 +152,11 @@ const getAllCartProducts = async (req, res) => {
     if (userCart.length === 0) {
       return res.status(200).json({ msg: "no products found" });
     }
-    const { items,total } = userCart[0];
-    
+    const { items, total } = userCart[0];
+
     res.status(200).json({
       cartItems: items,
-      total:total,
+      total: total,
       msg: "Products found successfully",
     });
   } catch (error) {
