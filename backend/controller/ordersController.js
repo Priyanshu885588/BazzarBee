@@ -1,5 +1,6 @@
 const Cart = require("../modals/cart");
 const User = require("../modals/user");
+const Order = require("../modals/orders");
 
 const addToCart = async (req, res) => {
   const { _id: userId } = req.user;
@@ -180,9 +181,24 @@ const clearCart = async (req, res) => {
   }
 };
 
+const storeUserAddress = async (req,res) => {
+  const {_id: userId} = req.user;
+  if (!userId) {
+    return res.status(400).json({ msg: "Please login to your account" });
+  }
+  req.body.userId = userId;
+  try {
+    const address = await Order.create(req.body);
+    res.status(200).json({res:address,msg:"address updated successfully!"})
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   addToCart,
   removeCart,
   getAllCartProducts,
   clearCart,
+  storeUserAddress,
 };
