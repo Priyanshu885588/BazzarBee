@@ -13,7 +13,8 @@ const {
   getSingleProduct,
   getCategoryProducts,
   catgoriesData,
-  cart
+  cart,
+  filterDataWoMensClothing,
 } = require("../controller/productController");
 
 router.route("/beauty").get(getBeautyProducts);
@@ -24,6 +25,7 @@ router.route("/rating").post(addRating);
 router.route("/fashion/men").get(getAllMensFashionProducts);
 router.route("/fashion/women").get(getAllWomensFashionProducts);
 router.route("/fashion/men/filterdata").get(filterDataMensClothing);
+router.route("/fashion/Women/filterdata").get(filterDataWoMensClothing);
 router.route("/fashion/filter").get(filterProducts);
 router.route("/single-product").get(getSingleProduct);
 router.route("/category-products").get(getCategoryProducts);
