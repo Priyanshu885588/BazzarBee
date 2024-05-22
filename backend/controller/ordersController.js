@@ -1,7 +1,6 @@
 const Cart = require("../modals/cart");
 const User = require("../modals/user");
 const Checkout = require("../modals/checkout");
-const { use } = require("../routes/ordersRoutes");
 
 const addToCart = async (req, res) => {
   const { _id: userId } = req.user;
@@ -245,24 +244,29 @@ const createCheckout = async (req, res) => {
   }
 };
 
-
-const fetchUserAddress = async (req,res)=>{
+const fetchUserAddress = async (req, res) => {
   const { _id: userId } = req.user;
   try {
-    const user = await User.find({_id:userId})
-    const Address = user[0].shippingAddress
-    if(Address.length == 0){
-      return res.json({msg:"user has no shipping address",shippingAddress:Address})
+    const user = await User.find({ _id: userId });
+    const Address = user[0].shippingAddress;
+    if (Address.length == 0) {
+      return res.status(201).json({
+        msg: "user has no shipping address",
+        shippingAddress: Address,
+      });
     }
-    res.json({msg:"user address found successfully",shippingAddress:Address})
+    res.status(200).json({
+      msg: "user address found successfully",
+      shippingAddress: Address,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
-  } 
-}
+  }
+};
 
-const addUserAddress = async (req,res)=>{
+const addUserAddress = async (req, res) => {
   const { _id: userId } = req.user;
-  const {address} = req.body;
+  const { address } = req.body;
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -270,11 +274,11 @@ const addUserAddress = async (req,res)=>{
     }
     user.shippingAddress.push(address);
     await user.save();
-    res.status(200).json(user);
+    res.status(200).json({ message: "Address added Successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 module.exports = {
   addToCart,
@@ -284,5 +288,5 @@ module.exports = {
   storeUserAddress,
   createCheckout,
   fetchUserAddress,
-  addUserAddress
+  addUserAddress,
 };
