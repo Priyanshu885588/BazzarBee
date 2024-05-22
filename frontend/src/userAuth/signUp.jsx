@@ -26,7 +26,7 @@ export const SignUp = () => {
     try {
       isLoading(true);
       const data = await sendVerificationCode({ email });
-      console.log(data);
+
       notifySuccess(data.message);
       setCodeSent(true);
     } catch (error) {
@@ -43,7 +43,6 @@ export const SignUp = () => {
     e.preventDefault();
     try {
       isLoading(true);
-      console.log(email, username, password, verificationCode, phoneNumber);
       const data = await usersignUp({
         email,
         username,
@@ -51,7 +50,6 @@ export const SignUp = () => {
         verificationCode,
         phoneNumber,
       });
-      console.log(data);
       notifySuccess(data.message);
       localStorage.setItem("BazzarBeeToken", data.token);
       localStorage.setItem("BazzarBeeId", data.userId);

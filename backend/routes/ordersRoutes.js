@@ -6,10 +6,15 @@ const {
   getAllCartProducts,
   clearCart,
   storeUserAddress,
+  createCheckout,
 } = require("../controller/ordersController");
 const auth = require("../middleware/auth");
 
 router.route("/addtocart").post(auth.authenticationMiddleware, addToCart);
+router
+  .route("/addtocheckout")
+  .post(auth.authenticationMiddleware, createCheckout);
+
 router
   .route("/removeProduct")
   .delete(auth.authenticationMiddleware, removeCart);
@@ -19,6 +24,6 @@ router
   .route("/getcartproducts")
   .get(auth.authenticationMiddleware, getAllCartProducts);
 
-router.route("/address").post(auth.authenticationMiddleware,storeUserAddress);
+router.route("/address").post(auth.authenticationMiddleware, storeUserAddress);
 
 module.exports = router;

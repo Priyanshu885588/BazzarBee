@@ -7,10 +7,6 @@ const CheckoutSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  userName: {
-    type: String,
-    required: true,
-  },
   items: [
     {
       productId: {

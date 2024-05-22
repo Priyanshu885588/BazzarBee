@@ -153,6 +153,7 @@ const getAllCartProducts = async (req, res) => {
     if (userCart.length === 0) {
       return res.status(200).json({ msg: "no products found" });
     }
+    console.log(userCart);
     const { items, total } = userCart[0];
 
     res.status(200).json({
@@ -197,10 +198,57 @@ const storeUserAddress = async (req, res) => {
   }
 };
 
+const createCheckout = async (req, res) => {
+  try {
+    const { address, typeOfAddress } = req.body;
+    const userId = req.user._id;
+
+    // Retrieve the cart from the database using userId
+    const cart = await Cart.findOne({ userId });
+
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "Cart is empty or cart items are required" });
+    }
+
+    if (!address || !typeOfAddress) {
+      return res
+        .status(400)
+        .json({ message: "Address and type of address are required" });
+    }
+
+    // Extract items, subTotal, tax, and total from the cart
+    const { items, subTotal, tax, total } = cart;
+
+    // Create a new checkout document
+    const newCheckout = new Checkout({
+      userId,
+      items,
+      Address: address,
+      typeOfAddress,
+      subTotal,
+      tax,
+      total,
+    });
+
+    // Save the checkout to the database
+    await newCheckout.save();
+
+    res.status(201).json({
+      message: "Checkout created successfully",
+      checkout: newCheckout,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   addToCart,
   removeCart,
   getAllCartProducts,
   clearCart,
   storeUserAddress,
+  createCheckout,
 };
