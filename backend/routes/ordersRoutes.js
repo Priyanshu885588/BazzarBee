@@ -7,6 +7,8 @@ const {
   clearCart,
   storeUserAddress,
   createCheckout,
+  fetchUserAddress,
+  addUserAddress
 } = require("../controller/ordersController");
 const auth = require("../middleware/auth");
 
@@ -25,5 +27,9 @@ router
   .get(auth.authenticationMiddleware, getAllCartProducts);
 
 router.route("/address").post(auth.authenticationMiddleware, storeUserAddress);
+
+router.route("/fetchuseraddress").get(auth.authenticationMiddleware,fetchUserAddress);
+
+router.route("/adduseraddress").post(auth.authenticationMiddleware,addUserAddress);
 
 module.exports = router;
