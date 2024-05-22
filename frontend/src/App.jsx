@@ -8,6 +8,7 @@ import "./App.css";
 import { ProductsMain } from "./products/ProductsMain";
 import { Cart } from "./elements/Cart";
 import { PrivateRoute } from "./elements/PrivateRoute";
+import { CheckoutAddress } from "./orders/CheckoutAddress";
 function App() {
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/categories/*" element={<ProductsMain />} />
         <Route path="" element={<PrivateRoute />}>
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<CheckoutAddress />} />
         </Route>
       </Routes>
       <Footer />
