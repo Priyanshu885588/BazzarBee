@@ -35,4 +35,23 @@ const addAddressInfo = async (data) => {
   }
 };
 
-export { getAddressInfo, addAddressInfo };
+const placeOrder = async (data) => {
+  try {
+    const token = localStorage.getItem("BazzarBeeToken");
+    const config = {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await axios.post(
+      `${API_URL}/checkout-session`,
+      data,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { getAddressInfo, addAddressInfo, placeOrder };

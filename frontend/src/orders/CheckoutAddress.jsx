@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { addAddressInfo, getAddressInfo } from "./services";
+import { addAddressInfo, getAddressInfo, placeOrder } from "./services";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCartData } from "../slices/cartApiSlice";
 import { ImSpinner5 } from "react-icons/im";
@@ -17,6 +17,10 @@ export const CheckoutAddress = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setIsLoading] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phonenumber, setphonenumber] = useState("");
+  const [addressId, setAddressId] = useState("");
 
   const addNewAddressHandler = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -31,7 +35,7 @@ export const CheckoutAddress = () => {
 
     try {
       const data = await addAddressInfo({ address: newAddress });
-      console.log(data);
+
       setaddNewAddress((prev) => !prev);
     } catch (error) {
     } finally {
@@ -87,12 +91,41 @@ export const CheckoutAddress = () => {
     const fetchAddress = async () => {
       try {
         const data = await getAddressInfo();
+
         setAddress(data);
       } catch (error) {}
     };
     fetchAddress();
     fetchCartItems();
   }, []);
+
+  const orderHandler = async (e) => {
+    setIsLoading(true);
+    e.preventDefault();
+    const selectedAddress = address.shippingAddress.find(
+      (item) => item._id === addressId
+    );
+    try {
+      const data = await placeOrder({
+        FirstName: firstName,
+        LastName: lastName,
+        phoneNumber: phonenumber,
+        Address: {
+          pinCode: selectedAddress.pinCode,
+          address: selectedAddress.address,
+          Town: selectedAddress.Town,
+          city: selectedAddress.city,
+          state: selectedAddress.state,
+        },
+      });
+      console.log(data);
+      window.location = data.url;
+    } catch (error) {
+      console.log("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -235,7 +268,7 @@ export const CheckoutAddress = () => {
             <h2 className="text-xl font-bold text-gray-800">
               Complete your order
             </h2>
-            <form className="mt-8">
+            <form className="mt-8" onSubmit={orderHandler}>
               <div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">
                   Personal Details
@@ -246,6 +279,8 @@ export const CheckoutAddress = () => {
                       type="text"
                       placeholder="First Name"
                       required
+                      onChange={(e) => setFirstName(e.target.value)}
+                      value={firstName}
                       className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
                     />
                   </div>
@@ -255,6 +290,8 @@ export const CheckoutAddress = () => {
                       type="text"
                       placeholder="Last Name"
                       required
+                      onChange={(e) => setLastName(e.target.value)}
+                      value={lastName}
                       className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
                     />
                   </div>
@@ -262,6 +299,8 @@ export const CheckoutAddress = () => {
                   <div className="relative flex items-center">
                     <input
                       type="number"
+                      onChange={(e) => setphonenumber(e.target.value)}
+                      value={phonenumber}
                       placeholder="Phone No."
                       required
                       className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
@@ -283,7 +322,14 @@ export const CheckoutAddress = () => {
                             className="rounded-xl text-sm  p-2 border flex gap-2"
                             key={item._id}
                           >
-                            <input type="radio" name="address" />
+                            <input
+                              type="radio"
+                              name="address"
+                              id={item._id}
+                              value={item._id}
+                              onChange={(e) => setAddressId(e.target.value)}
+                              required
+                            />
                             {item.address} {item.city} {item.state}
                             {" ~ "}
                             {item.pinCode}
