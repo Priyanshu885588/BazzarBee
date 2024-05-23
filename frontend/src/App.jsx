@@ -9,6 +9,7 @@ import { ProductsMain } from "./products/ProductsMain";
 import { Cart } from "./elements/Cart";
 import { PrivateRoute } from "./elements/PrivateRoute";
 import { CheckoutAddress } from "./orders/CheckoutAddress";
+import { Success } from "./orders/Success";
 function App() {
   return (
     <>
@@ -20,6 +21,7 @@ function App() {
         <Route path="" element={<PrivateRoute />}>
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckoutAddress />} />
+          <Route path="/orders/success" element={<Success />} />
         </Route>
       </Routes>
       <Footer />
