@@ -280,6 +280,25 @@ const addUserAddress = async (req, res) => {
   }
 };
 
+
+const checkoutSession = async (req,res)=>{
+  const { _id: userId } = req.user;
+  const {FirstName,LastName,phoneNumber,Address} = req.body
+  try {
+    const userCart = await Cart.find({userId:userId})
+    const userCartItems = userCart[0].items;
+    const subTotal = userCart[0].subTotal;
+    const tax = userCart[0].tax;
+    const total = userCart[0].total;
+    const response = await Checkout.create({userId:userId,FirstName:FirstName,LastName:LastName,phoneNumber:phoneNumber,Address:Address,items:userCartItems,subTotal:subTotal,tax:tax,total:total});
+    res.status(200).json({response:response,mgs:"successfull"})
+  } catch (e) {
+    res.status(500).json({ error: e.message })
+  }
+
+}
+
+
 module.exports = {
   addToCart,
   removeCart,
@@ -289,4 +308,5 @@ module.exports = {
   createCheckout,
   fetchUserAddress,
   addUserAddress,
+  checkoutSession
 };

@@ -8,7 +8,8 @@ const {
   storeUserAddress,
   createCheckout,
   fetchUserAddress,
-  addUserAddress
+  addUserAddress,
+  checkoutSession
 } = require("../controller/ordersController");
 const auth = require("../middleware/auth");
 
@@ -31,5 +32,7 @@ router.route("/address").post(auth.authenticationMiddleware, storeUserAddress);
 router.route("/fetchuseraddress").get(auth.authenticationMiddleware,fetchUserAddress);
 
 router.route("/adduseraddress").post(auth.authenticationMiddleware,addUserAddress);
+
+router.route("/checkout-session").post(auth.authenticationMiddleware,checkoutSession);
 
 module.exports = router;

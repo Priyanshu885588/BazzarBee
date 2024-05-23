@@ -1,10 +1,21 @@
 const mongoose = require("mongoose");
-const user = require("./user");
 
 const CheckoutSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
+  },
+  FirstName: {
+    type: String,
+    required:true
+  },
+  LastName: {
+    type: String,
+    required:true
+  },
+  phoneNumber: {
+    type: String,
     required: true,
   },
   items: [
@@ -63,10 +74,6 @@ const CheckoutSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-  },
-  typeOfAddress: {
-    type: String,
-    required: true,
   },
   subTotal: {
     type: Number,
