@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { addAddressInfo, getAddressInfo } from "./services";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCartData } from "../slices/cartApiSlice";
+import { ImSpinner5 } from "react-icons/im";
 export const CheckoutAddress = () => {
   const dispatch = useDispatch();
 
@@ -15,10 +16,11 @@ export const CheckoutAddress = () => {
   const [pincodeValue, setPincodeValue] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [loading, setIsLoading] = useState(false);
 
   const addNewAddressHandler = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
-
+    setIsLoading(true);
     const newAddress = {
       address: addressValue,
       Town: townValue,
@@ -31,12 +33,16 @@ export const CheckoutAddress = () => {
       const data = await addAddressInfo({ address: newAddress });
       console.log(data);
       setaddNewAddress((prev) => !prev);
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
     setAddressValue("");
     setTownValue("");
     setCityValue("");
     setStateValue("");
     setPincodeValue("");
+    window.location.reload();
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -61,7 +67,7 @@ export const CheckoutAddress = () => {
     }
   };
   useEffect(() => {
-    console.log(22);
+    setIsLoading(true);
     const fetchCartItems = async () => {
       dispatch(fetchCartData())
         .then((response) => {
@@ -74,7 +80,9 @@ export const CheckoutAddress = () => {
           console.error("Cart items not available", error);
           setCartItems([]);
         })
-        .finally(() => {});
+        .finally(() => {
+          setIsLoading(false);
+        });
     };
     const fetchAddress = async () => {
       try {
@@ -85,6 +93,14 @@ export const CheckoutAddress = () => {
     fetchAddress();
     fetchCartItems();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="h-screen w-screen flex justify-center items-center">
+        <ImSpinner5 className="w-6 h-6 animate-spin" />
+      </div>
+    );
+  }
 
   if (addNewAddress) {
     return (
@@ -229,6 +245,7 @@ export const CheckoutAddress = () => {
                     <input
                       type="text"
                       placeholder="First Name"
+                      required
                       className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
                     />
                   </div>
@@ -237,6 +254,7 @@ export const CheckoutAddress = () => {
                     <input
                       type="text"
                       placeholder="Last Name"
+                      required
                       className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
                     />
                   </div>
@@ -245,6 +263,7 @@ export const CheckoutAddress = () => {
                     <input
                       type="number"
                       placeholder="Phone No."
+                      required
                       className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
                     />
                   </div>
@@ -305,7 +324,10 @@ export const CheckoutAddress = () => {
                         &#8377; {parseFloat(totalPrice.toFixed(2)) + 99}
                       </dd>
                     </dl>
-                    <button className="text-sm bg-orange-500 text-white capitalize text-left mt-2 hover:opacity-75 px-2 py-1 border-2 w-fit rounded-md">
+                    <button
+                      type="submit"
+                      className="text-sm bg-orange-500 text-white capitalize text-left mt-2 hover:opacity-75 px-2 py-1 border-2 w-fit rounded-md"
+                    >
                       Place Order
                     </button>
                   </div>
