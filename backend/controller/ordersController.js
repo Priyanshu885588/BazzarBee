@@ -1,6 +1,7 @@
 const Cart = require("../modals/cart");
 const User = require("../modals/user");
 const Checkout = require("../modals/checkout");
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 const addToCart = async (req, res) => {
   const { _id: userId } = req.user;
@@ -291,7 +292,25 @@ const checkoutSession = async (req,res)=>{
     const tax = userCart[0].tax;
     const total = userCart[0].total;
     const response = await Checkout.create({userId:userId,FirstName:FirstName,LastName:LastName,phoneNumber:phoneNumber,Address:Address,items:userCartItems,subTotal:subTotal,tax:tax,total:total});
-    res.status(200).json({response:response,mgs:"successfull"})
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      line_items: userCartItems.map(item => {
+        return {
+          price_data: {
+            currency: "inr",
+            product_data: {
+              name: item.name,
+            },
+            unit_amount: Math.round(item.total),
+          },
+          quantity: item.quantity,
+        }
+      }),
+      success_url: `https://bazzar-bee.vercel.app/orders/success`,
+      cancel_url: `https://bazzar-bee.vercel.app/checkout`,
+    })
+    res.status(200).json({url:session.url,mgs:"successfull"})
   } catch (e) {
     res.status(500).json({ error: e.message })
   }
